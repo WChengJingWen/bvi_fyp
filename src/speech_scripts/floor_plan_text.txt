@@ -1,0 +1,276 @@
+The location named Office is located at Block A Ground Floor. In Malay, it is called Pejabat. It is typically used for the following purpose: Various offices on the ground floor. Nearby, you can find: Foyer, Lecture Room 1, Cubes. The nearest male and female toilet (washroom) for Office is located at Block A Ground Floor, beside Lecture Room.
+
+The location named Reception Counter is located at Block A Ground Floor. It is typically used for the following purpose: To ask anything about the faculty. Post-graduate counter is located at the left side. Undergraduate counter is located at the right side. The reception counter is part of the office. 
+
+The opening hours of the Office and Reception Counter is: Monday to Thursday, 8am to 1pm, 2pm to 5.30pm while Friday, 8am to 12.15pm, 2.45pm to 5.30pm. It is closed on weekends and public holidays. 
+
+The location named Pantry is located at Block A Ground Floor. In Malay, it is called Pantri. It is typically used for the following purpose: Pantry area for snacks and drinks. It is in the Office. Nearby, you can find: Foyer, Main Entrance. 
+
+The location named Foyer is located at Block A Ground Floor. In Malay, it is called Foyer. It is typically used for the following purpose: Common area for relaxation and doing own works. Nearby, you can find: Lecture Room 1, Cubes. This location has the following features: Water Dispenser. The nearest male and female toilet (washroom) for Foyer is located at Block A Ground Floor, beside Lecture Room.
+
+The location named Lecture Room 1 (also known as BK1) is located at Block A Ground Floor. In Malay, it is called Bilik Kuliah Satu. It is typically used for the following purpose: Room for lectures and classes. Nearby, you can find: Offices, Toilets, Stairs. There is a link bridge with stairs connecting Block A Ground Floor and Block B Ground Floor outside the Lecture Room 1. The nearest male and female toilet (washroom) for Lecture Room is located at Block A Ground Floor, right beside it.
+
+There is a toilet area between the Main Entrance and the Lecture Room. In Malay, it is called Tandas. There are toilets for females, males and disabled person (Orang Kurang Upaya - OKU). 
+
+The location named Dean's Office 2 is located at Block A Ground Floor. In Malay, it is called Pejabat Dekan 2. It is typically used for the following purpose: Office of the Dean. Nearby, you can find: Main Entrance, Cubes. The nearest male and female toilet (washroom) for Dean's Office 2 is located at Block A Ground Floor, beside Lecture Room.
+
+The location named Cubes is located at Block A Ground Floor. It is typically used for the following purpose: Room for meetings or events. Nearby, you can find: Dean's Office 2, Office, Stairs. The nearest male and female toilet (washroom) for Cubes is located at Block A Ground Floor, beside Lecture Room.
+
+The location named Main Entrance is located at Block A Ground Floor. In Malay, it is called Pintu Utama. It is typically used for the following purpose: Main entrance to Block A. Nearby, you can find: Stairs, Toilets, Dean's Office 2, Store. The nearest male and female toilet (washroom) for Main Entrance is located at Block A Ground Floor, right beside it.
+
+There is a stairs right opposite the main entrance at Block A Ground Floor. It is the main stairs to go to the Block A First Floor and Block A Second Floor.
+
+
+
+
+The location named PEKOM Room is located at Block A First Floor. In Malay, it is called Bilik PEKOM. It is typically used for the following purpose: Room for PEKOM activities and meetings. Nearby, you can find: CCNA Lab, Postgrad Lab. The nearest male toilet (male washroom) for PEKOM Room is located at Block A Ground Floor, beside Lecture Room. The nearest female toilet (female washroom) for PEKOM Room is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named CCNA Lab (also known as CCNA) is located at Block A First Floor. In Malay, it is called Makmal CCNA. It is typically used for the following purpose: Lab for CCNA networking works and classes. Nearby, you can find: Micro Lab 1, Micro Lab 2. There is a link bridge connecting Block A First Floor and Block B Second Floor outside the CCNA Lab.  The nearest male toilet (male washroom) for CCNA Lab is located at Block A Ground Floor, beside Lecture Room. The nearest female toilet (female washroom) for CCNA Lab is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Micro Lab 2 (also known as MM2) is located at Block A First Floor. In Malay, it is called Makmal Mikro Dua. It is typically used for the following purpose: Lab for classes or tutorials. Nearby, you can find: Postgrad Lab, CCNA Lab. The nearest male toilet (male washroom) for Micro Lab 2 is located at Block A Ground Floor, beside Lecture Room. The nearest female toilet (female washroom) for Micro Lab 2 is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Postgrad Lab (also known as ML) is located at Block A First Floor. In Malay, it is called Makmal Lanjutan. It is typically used for the following purpose: Lab for postgraduate students and other classes or tutorials. Nearby, you can find: Micro Lab 2, Micro Lab 1, Discussion Room. The nearest male toilet (male washroom) for Postgraduate Lab is located at Block A Ground Floor, beside Lecture Room. The nearest female toilet (female washroom) for Postgraduate Lab is located at Block A First Floor, right beside it.
+
+The location named Discussion Room is located at Block A First Floor. In Malay, it is called Ruang Perbincangan Pelajar. It is typically used for the following purpose: Room for students meetings and discussions. Nearby, you can find: Postgrad Lab, Micro Lab 1. The nearest male toilet (male washroom) for Disucssion Room is located at Block A Ground Floor, beside Lecture Room. The nearest female toilet (female washroom) for Disucssion Room is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Micro Lab 1 (also known as MM1) is located at Block A First Floor. In Malay, it is called Makmal Mikro Satu. It is typically used for the following purpose: Lab for classes or tutorials. Nearby, you can find: Discussion Room, Postgrad Lab, Server Room. The nearest male toilet (male washroom) for Micro Lab 1 is located at Block A Ground Floor, beside Lecture Room. The nearest female toilet (female washroom) for Micro Lab 1 is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Server Room is located at Block A First Floor. In Malay, it is called Bilik Pelayan. It is typically used for the following purpose: Room dedicated to servers and IT infrastructure. Nearby, you can find: Mikro Lab 1, Computer Technology Lab, Stairs. The nearest male toilet (male washroom) for Server Room is located at Block A Ground Floor, beside Lecture Room. The nearest female toilet (female washroom) for Server Room is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Computer Technology Lab is located at Block A First Floor. In Malay, it is called Makmal Teknologi Komputer. It is typically used for the following purpose: Lab for computer technology staffs. Nearby, you can find: Server Room, Technical Room. The nearest male toilet (male washroom) for Computer Technology Lab is located at Block A Ground Floor, beside Lecture Room. The nearest female toilet (female washroom) for Computer Technology Lab is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Technical Room is located at Block A First Floor. In Malay, it is called Bilik Teknikal. It is typically used for the following purpose: Room for technical staffs. Nearby, you can find: Computer Technology Lab, Counter for Software. The nearest male toilet (male washroom) for Technical Room is located at Block A Ground Floor, beside Lecture Room. The nearest female toilet (female washroom) for Technical Room is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Counter for Software is located at Block A First Floor. In Malay, it is called Kaunter Perision. It is typically used for the following purpose: Counter for enquiries related to software or technical issues. It is in front of the Technical Room. Nearby, you can find: Computer Technology Lab. The nearest male toilet (male washroom) for Counter for Software is located at Block A Ground Floor, beside Lecture Room. The nearest female toilet (female washroom) for Counter for Software is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Staff Lounge is located at Block A First Floor. It is typically used for the following purpose: Lounge area for staffs. Nearby, you can find: Postgraduate Lounge, CCNA Lab. The nearest male toilet (male washroom) for Staff Lounge is located at Block A Ground Floor, beside Lecture Room. The nearest female toilet (female washroom) for Staff Lounge is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Postgraduate Lounge is located at Block A First Floor. It is typically used for the following purpose: Lounge area for postgraduate students. Nearby, you can find: Staff Lounge, Female Toilet. The nearest male toilet (male washroom) for Postgraduate Lounge is located at Block A Ground Floor, beside Lecture Room. The nearest female toilet (female washroom) for Postgraduate Lounge is located at Block A First Floor, right beside it.
+
+There is a female toilet beside the Postgraduate Lounge. 
+
+There is a stairs between the Postgraduate Lounge and Computer Technology Room. It is the main stairs to go to the Block A Ground Floor and Block A Second Floor.
+
+The location named Female Prayer Room is located at Block A First Floor. In Malay, it is called Surau Perempuan. It is typically used for the following purpose: prayer room for female Muslims. Nearby, you can find: Postgraduate Lounge, Female Toilet. 
+
+
+In Malay, Lecturer Room is called Bilik Pensyarah. Lecturer Room is also known as Office of Lecturer.
+
+The location named Lecturer Room of Dr. Nurul Fazmidah binti Mohd Noor (also known as Dr. Fazmidah Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Burhan UL Islam Khan, Lecturer Room of Associate Prof. Dr. Liew Chee Sun, Robotic Lab. The nearest male toilet (male washroom) for Dr. Fazmidah Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Fazmidah Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Associate Prof. Dr. Liew Chee Sun is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Nurul Fazmidah binti Mohd Noor, Lecturer Room of Prof. Dr. Teh Ying Wah. The nearest male toilet (male washroom) for Dr. Liew Chee Sun Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Liew Chee Sun Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Prof. Dr. Teh Ying Wah is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Liew Chee Sun, Lecturer Room of Prof. Dr. Chiew Thiam Kian. The nearest male toilet (male washroom) for Dr. Teh Ying Wah Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Teh Ying Wah Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Prof. Dr. Chiew Thiam Kian (also known as Dr. Chiew Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Adeleh Asemi Zavareh, Lecturer Room of Prof. Dr. Teh Ying Wah. The nearest male toilet (male washroom) for Dr. Chiew Thiam Kian Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Chiew Thiam Kian Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Adeleh Asemi Zavareh (also known as Dr. Adeleh Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Prof. Dr. Chiew Thiam Kian, Lecturer Room of Dr. Zati Hakim binti Azizul Hasan. The nearest male toilet (male washroom) for Dr. Adeleh Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Adeleh Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Zati Hakim binti Azizul Hasan (also known as Dr. Zati Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Hoo Wai Lam, Lecturer Room of Dr. Adeleh Asemi Zavareh. The nearest male toilet (male washroom) for Dr. Zati Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Zati Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Hoo Wai Lam (also known as Dr. Hoo Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Zati Hakim binti Azizul Hasan, Lecturer Room of Dr. Lim Chee Kau. The nearest male toilet (male washroom) for Dr. Hoo Wai Lam Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Hoo Wai Lam Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Lim Chee Kau is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Hoo Wai Lam, Lecturer Room of Associate Prof. Dr. Ling Teck Chaw. The nearest male toilet (male washroom) for Dr. Lim Chee Kau Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Lim Chee Kau Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Associate Prof. Dr. Ling Teck Chaw (also known as Dr. Ling Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Uzair Ishtiaq, Lecturer Room of Dr. Lim Chee Kau. The nearest male toilet (male washroom) for Dr. Ling Teck Chaw Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Ling Teck Chaw Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Uzair Ishtiaq is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Ling Teck Chaw, Lecturer Room of Dr. Riyaz Ahamed Ariyaluran Habeeb Mohamed. The nearest male toilet (male washroom) for Dr. Uzair Ishtiaq Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Uzair Ishtiaq Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Riyaz Ahamed Ariyaluran Habeeb Mohamed is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Uzair Ishtiaq, Lecturer Room of Dr. Nurul binti Japar. The nearest male toilet (male washroom) for Dr. Riyaz Ahamed Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Riyaz Ahamed Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Nurul binti Japar is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Riyaz Ahamed Ariyaluran Habeeb Mohamed, Lecturer Room of Prof. Dr. Loo Chu Kiong. The nearest male toilet (male washroom) for Dr. Nurul Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Nurul Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Prof. Dr. Loo Chu Kiong (also known as Dr. Loo Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Nurul binti Japar, Lecturer Room of Dr. Su Moon Ting. The nearest male toilet (male washroom) for Dr. Loo Chu Kiong Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Loo Chu Kiong Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Su Moon Ting is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Prof. Dr. Loo Chu Kiong, Lecturer Room of Dr. Saw Shier Nee. It is opposite of the Faculty Meeting Room Entrance. The nearest male toilet (male washroom) for Dr. Su Moon Ting Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Su Moon Ting Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Saw Shier Nee (also known as Dr. Saw Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Su Moon Ting, Lecturer Room of Dr. Ong Sim Ying. It is opposite of the Faculty Meeting Room Entrance. The nearest male toilet (male washroom) for Dr. Saw Shier Nee Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Saw Shier Nee Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Burhan UL Islam Khan (also known as Dr. Burhan Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Nurul Fazmidah binti Mohd Noor, Lecturer Room of Dr. Mohamed N. M. Lubani, Robotic Lab. The nearest male toilet (male washroom) for Dr. Burhan Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Burhan Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Mohamed N. M. Lubani (also known as Dr. Lubani Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Burhan UL Islam Khan, Robotic Lab. The nearest male toilet (male washroom) for Dr. Lubani Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Lubani Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Uzair Iqbal is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Ong Sim Ying, Seminar Room 1. The nearest male toilet (male washroom) for Dr. Uzair Iqbal Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Uzair Iqbal Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Faculty Meeting Room is located at Block A Second Floor. In Malay, it is called Bilik Mesyuarat Faculty.  It is typically used for the following purpose: Room for faculty level meetings and discussions. Lecturer Room of Dr. Su Moon Ting and Dr. Saw Shier Nee are right opposite its door.The nearest male toilet (male washroom) for Faculty Meeting Room is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Faculty Meeting Room is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Robotic Lab is located at Block A Second Floor. It is typically used for the following purpose: Room for robotics related works and classes. Nearby, you can find: Lecturer Room of Dr. Burhan UL Islam Khan, Dr. Mohamed N. M. Lubani. The nearest male toilet (male washroom) for Robotic Lab is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Robotic Lab is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Madam Fazidah binti Othman (also known as Madam Fazidah Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Norisma binti Idris, Lecturer Room of Mr. Emran bin Mohd Tamil. The nearest male toilet (male washroom) for Madam Fazidah Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Madam Fazidah Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Associate Prof. Dr. Norisma binti Idris (also known as Dr. Norisma Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Madam Fazidah binti Othman, Lecturer Room of Mr. Emran bin Mohd Tamil. The nearest male toilet (male washroom) for Dr. Norisma Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Norisma Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Mr. Emran bin Mohd Tamil (also known as Mr. Emran Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Madam Fazidah binti Othman, Lecturer Room of Associate Prof. Dr. Norisma binti Idris. The nearest male toilet (male washroom) for Mr. Emran Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Mr. Emran Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Male Prayer Room is located at Block A Second Floor. In Malay, it is called Surau Lelaki. It is typically used for the following purpose: prayer room for male Muslims. Nearby, you can find: Male Toilet. 
+
+There is a Male Toilet near the Lecturer Room of Mr. Emran bin Mohd Tamil and Male Prayer Room. It is located at Block A Second Floor. 
+
+There is a water dispenser outside the area of male toilet and male prayer room. It is located at Block A Second Floor.
+
+The location named Lecture Room 2 (also known as BK2) is located at Block A Second Floor. In Malay, it is called Bilik Kuliah Dua. It is typically used for the following purpose: Room for lectures and classes. It is opposite of the male toilet and prayer room area. Nearby, you can find: Seminar Room 2. The nearest male toilet (male washroom) for Lecture Room 2 is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Lecture Room 2 is located at Block A First Floor, beside Postgraduate Lounge.
+
+There is a stairs between the Lecture Room 2 and Male Prayer Room. It is the main stairs to go to the Block A Ground Floor and Block A First Floor Floor. It is just beside the Seminar Room 2. 
+
+The location named Seminar Room 2 (also known as BS2) is located at Block A Second Floor. In Malay, it is called Bilik Seminar Dua. It is typically used for the following purpose: Room for meetings and discussions. Nearby, you can find: Lecture Room 2, Stairs. The nearest male toilet (male washroom) for Seminar Room 2 is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Seminar Room 2 is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Zhao Na (also known as Dr. Zhao Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Ts. Aznul Qalid bin MD Sabri, Lecturer Room of Dr. Siti Soraya binti Abdul Rahman. The nearest male toilet (male washroom) for Dr. Zhao Na Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Zhao Na Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Associate Prof. Dr. Ts. Aznul Qalid bin MD Sabri (also known as Dr. Aznul Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Dr. Zhao Na, Lecturer Room of Dr. Siti Soraya binti Abdul Rahman. The nearest male toilet (male washroom) for Dr. Aznul Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Aznul Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Lecturer Room of Dr. Siti Soraya binti Abdul Rahman (also known as Dr. Siti Soraya Office) is located at Block A Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Ts. Aznul Qalid bin MD Sabri, Lecturer Room of Dr. Zhao Na. The nearest male toilet (male washroom) for Dr. Siti Soraya Office is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Dr. Siti Soraya Office is located at Block A First Floor, beside Postgraduate Lounge.
+
+The location named Seminar Room 1 (also known as BS1) is located at Block A Second Floor. In Malay, it is called Bilik Seminar Satu. It is typically used for the following purpose: Room for meetings and discussions. Nearby, you can find: Lecturer Room of Dr. Uzair Iqbal. The nearest male toilet (male washroom) for Seminar Room 1 is located at Block A Second Floor, beside the Male Prayer Room. The nearest female toilet (female washroom) for Seminar Room 1 is located at Block A First Floor, beside Postgraduate Lounge.
+
+
+
+
+The location named Tutorial Room 1 (also known as BT1) is located at Block B Ground Floor. In Malay, it is called Bilik Tutorial Satu. It is typically used for the following purpose: Room for tutorials and small classes. Nearby, you can find: Tutorial Room 2. The nearest male and female toilet (washroom) for Tutorial Room 1 is located at Block B Ground Floor, between Micro Lab 4 and Technical Room.
+
+The location named Tutorial Room 2 (also known as BT2) is located at Block B Ground Floor. In Malay, it is called Bilik Tutorial Dua. It is typically used for the following purpose: Room for tutorials and small classes. Nearby, you can find: Tutorial Room 1, Tutorial Room 3. The nearest male and female toilet (washroom) for Tutorial Room 2 is located at Block B Ground Floor, between Micro Lab 4 and Technical Room.
+
+The location named Tutorial Room 3 (also known as BT3) is located at Block B Ground Floor. In Malay, it is called Bilik Tutorial Tiga. It is typically used for the following purpose: Room for tutorials and small classes. Nearby, you can find: Tutorial Room 2, Tutorial Room 4. The nearest male and female toilet (washroom) for Tutorial Room 3 is located at Block B Ground Floor, between Micro Lab 4 and Technical Room.
+
+The location named Tutorial Room 4 (also known as BT4) is located at Block B Ground Floor. In Malay, it is called Bilik Tutorial Empat. It is typically used for the following purpose: Room for tutorials and small classes. Nearby, you can find: Tutorial Room 3. The nearest male and female toilet (washroom) for Tutorial Room 4 is located at Block B Ground Floor, between Micro Lab 4 and Technical Room.
+
+The location named Lecture Theater 1 (also known as DK1) is located at Block B Ground Floor. In Malay, it is called Dewan Kuliah Satu. It is typically used for the following purpose: Room for lectures and big classes. Nearby, you can find: Lecture Theater 2, Lift. The nearest male and female toilet (washroom) for Lecture Theater 1 is located at Block B Ground Floor, between Micro Lab 4 and Technical Room.
+
+The location named Lecture Theater 2 (also known as DK2) is located at Block B Ground Floor. In Malay, it is called Dewan Kuliah Dua. It is typically used for the following purpose: Room for lectures and big classes. Nearby, you can find: Lecture Theater 1, Micro Lab 3. The nearest male and female toilet (washroom) for Lecture Theater 2 is located at Block B Ground Floor, between Micro Lab 4 and Technical Room.
+
+The location named Micro Lab 3 (also known as MM3) is located at Block B Ground Floor. In Malay, it is called Makmal Mikro Tiga. It is typically used for the following purpose: Lab for classes or tutorials. Nearby, you can find: Lecture Theater 2, Micro Lab 4. The nearest male and female toilet (washroom) for Micro Lab 3 is located at Block B Ground Floor, between Micro Lab 4 and Technical Room.
+
+The location named Micro Lab 4 (also known as MM4) is located at Block B Ground Floor. In Malay, it is called Makmal Mikro Empat. It is typically used for the following purpose: Lab for classes or tutorials. Nearby, you can find: Micro Lab 3, Toilet. The nearest male and female toilet (washroom) for Micro Lab 4 is located at Block B Ground Floor, between it and Technical Room.
+
+The location named Technical Room is located at Block B Ground Floor. In Malay, it is called Bilik Teknikal. It is typically used for the following purpose: Room for technical staffs and related works. Nearby, you can find: Micro Lab 4, Toilet, Study Area. The nearest male and female toilet (washroom) for Technical Room is located at Block B Ground Floor, between it and Micro Lab 4.
+
+There is a toilet area between the Micro Lab 4 and the Technical Room. In Malay, it is called Tandas. There are toilets for females, males and disabled person (Orang Kurang Upaya - OKU).
+
+There is a study area near the Micro Lab 4 and the Technical Room. It is typically used for the following purpose: Place for discussions, study or doing own works. 
+
+There is a stairs opposite of the Study Area to go to Block B First Floor.
+
+There is a Vending Machine beside the stairs, right opposite the main door of Lecture Theater 1. 
+
+There is a Lift available beside Lecture Theater 1. It is accessible to Block B First Floor and Block B Second Floor.
+
+The location named Lecturer Room of Associate Prof. Dr. Ang Tan Fong (also known as Dr. Ang Office) is located at Block B Ground Floor. Nearby, you can find: Lecturer Room of Prof. Dr. Por Lip Yee, Lecturer Room of Associate Prof. Dr. Raja Jamilah binti Raja Yusof. The nearest male and female toilet (washroom) for  Dr. Ang Tan Fong Office is located at Block B Ground Floor, between Micro Lab 4 and Technical Room.
+
+The location named Lecturer Room of Prof. Dr. Por Lip Yee is located at Block B Ground Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Ang Tan Fong, Lecturer Room of Associate Prof. Dr. Raja Jamilah binti Raja Yusof. The nearest male and female toilet (washroom) for Dr. Por Lip Yee Office is located at Block B Ground Floor, between Micro Lab 4 and Technical Room.
+
+The location named Lecturer Room of Associate Prof. Dr. Raja Jamilah binti Raja Yusof is located at Block B Ground Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Ang Tan Fong, Lecturer Room of Prof. Dr. Por Lip Yee. The nearest male and female toilet (washroom) for Dr. Raja Jamilah Office is located at Block B Ground Floor, between Micro Lab 4 and Technical Room.
+
+The location named Micro Lab 6 (also known as MM6) is located at Block B Ground Floor. In Malay, it is called Makmal Mikro Enam. It is typically used for the following purpose: Lab for classes or tutorials. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Raja Jamilah binti Raja Yusof. There is a link bridge with stairs connecting Block B Ground Floor and Block A Ground Floor outside the Micro Lab 6. The nearest male and female toilet (washroom) for Micro Lab 6 is located at Block B Ground Floor, between Micro Lab 4 and Technical Room.
+
+
+
+
+
+
+The location named Seminar Room 3 (also known as BS3) is located at Block B First Floor. In Malay, it is called Bilik Seminar Tiga. It is typically used for the following purpose: Room for seminars and presentations. Nearby, you can find: Lecturer Room of Dr. Nazean binti Jomhari, Lecturer Room of Dr. Chiam Yin Kia. The nearest male and female toilet (washroom) for Seminar Room 3 is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Student Center is located at Block B First Floor. In Malay, it is called Pusat Activiti Pelajar. It is typically used for the following purpose: Center for student activities or studying. Nearby, you can find: Lift, Stairs. This location has the following features: Pantry. The nearest male and female toilet (washroom) for Student Center is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Discussion Room 1 is located at Block B First Floor, inside the Student Center. In Malay, it is called Bilik Perbincangan Satu. It is typically used for the following purpose: Room for students discussions or meetings. The nearest male and female toilet (washroom) for Discussion Room 1 is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Discussion Room 2 is located at Block B First Floor, inside the Student Center. In Malay, it is called Bilik Perbincangan Dua. It is typically used for the following purpose: Room for students discussions or meetings. The nearest male and female toilet (washroom) for Discussion Room 2 is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+There is a toilet area near the Lecturer Room of Dr. Nazean binti Jomhari and Lecturer Room of Dr. Liew Wei Shiung. In Malay, it is called Tandas. There are toilets for female and male. 
+
+The location named Lecturer Room of Dr. Nazean binti Jomhari (also known as Dr. Nazean Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Dr. Chiam Yin Kia, Female Toilet. The nearest male and female toilet (washroom) for Dr. Nazean Office is located at Block B First Floor, beside it and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Dr. Chiam Yin Kia (also known as Dr. Chiam Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Dr. Nazean binti Jomhari, Lecturer Room of Associate Prof. Dr. Kasturi Dewi A/P Varathan. The nearest male and female toilet (washroom) for Dr. Chiam Yin Kia Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Associate Prof. Dr. Kasturi Dewi A/P Varathan (also known as Dr. Kasturi Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Dr. Chiam Yin Kia, Lecturer Room of Associate Prof. Dr. Azah Anir binti Norman. The nearest male and female toilet (washroom) for Dr. Kasturi Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Associate Prof. Dr. Azah Anir binti Norman is located at Block B First Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Kasturi Dewi A/P Varathan, Seminar Room 3. The nearest male and female toilet (washroom) for Dr. Azah Anir Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Dr. Liew Wei Shiung is located at Block B First Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Amirrudin bin Kamsin, Lecturer Room of Associate Prof. Dr. Mumtaz Begum binti Peer Mustafa. The nearest male and female toilet (washroom) for Dr. Liew Wei Shiung Office is located at Block B First Floor, beside it and Dr. Nazean Office.
+
+The location named Lecturer Room of Associate Prof. Dr. Mumtaz Begum binti Peer Mustafa is located at Block B First Floor. Nearby, you can find: Lecturer Room of Dr. Liew Wei Shiung, Lecturer Room of Dr. Nur Nasuha binti Mohd Daud. The nearest male and female toilet (washroom) for Dr. Mumtaz Begum Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Dr. Nur Nasuha binti Mohd Daud (also known as Dr. Nasuha Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Mumtaz Begum binti Peer Mustafa, Lecturer Room of Associate Prof. Dr. Azah Anir binti Norman. The nearest male and female toilet (washroom) for Dr. Nasuha Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Dr. Muhammad Nur Firdaus bin Sahran is located at Block B First Floor. Nearby, you can find: Lecturer Room of Dr. Nur Nasuha binti Mohd Daud, Lecturer Room of Dr. Bryan Raj A/L Peter Jabaraj. The nearest male and female toilet (washroom) for Dr. Firdaus Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Dr. Bryan Raj A/L Peter Jabaraj (also known as Dr. Bryan Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Dr. Muhammad Nur Firdaus bin Sahran, Lecturer Room of Prof. Ts. Dr. Vimala A/P Balakrishnan. The nearest male and female toilet (washroom) for Dr. Bryan Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Prof. Ts. Dr. Vimala A/P Balakrishnan (also known as Dr. Vimala Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Dr. Bryan Raj A/L Peter Jabaraj, Lecturer Room of Prof. Dr. Nor Liyana binti Mohd Shuib. The nearest male and female toilet (washroom) for Dr. Vimala Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Prof. Dr. Nor Liyana binti Mohd Shuib (also known as Dr. Liyana Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Prof. Ts. Dr. Vimala A/P Balakrishnan, Lecturer Room of Dr. Mohamad Hazim bin Md Hanif. The nearest male and female toilet (washroom) for Dr. Liyana Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Dr. Mohamad Hazim bin Md Hanif (also known as Dr. Hazim Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Prof. Dr. Nor Liyana binti Mohd Shuib, Lecturer Room of Associate Prof. Dr. Saaidal Razalli bin Azzuhri. The nearest male and female toilet (washroom) for Dr. Hazim Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Associate Prof. Dr. Saaidal Razalli bin Azzuhri (also known as Dr. Saaidal Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Dr. Mohamad Hazim bin Md Hanif, Lecturer Room of Associate Prof. Ts. Dr. Ismail bin Ahmedy. The nearest male and female toilet (washroom) for Dr. Saaidal Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Associate Prof. Ts. Dr. Ismail bin Ahmedy (also known as Dr. Ismail Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Saaidal Razalli bin Azzuhri, Lecturer Room of Mr. Noorzaily bin Mohamed Noor. The nearest male and female toilet (washroom) for Dr. Ismail Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Mr. Noorzaily bin Mohamed Noor (also known as Mr. Noorzaily Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Associate Prof. Ts. Dr. Ismail bin Ahmedy, Lecturer Room of Associate Prof. Dr. Suraya binti Hamid. The nearest male and female toilet (washroom) for Dr. Noorzaily Office2 is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Associate Prof. Dr. Suraya binti Hamid (also known as Dr. Suraya Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Mr. Noorzaily bin Mohamed Noor, Lecturer Room of Associate Prof. Dr. Amirrudin bin Kamsin. The nearest male and female toilet (washroom) for Dr. Suraya Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Associate Prof. Dr. Amirrudin bin Kamsin is located at Block B First Floor. Nearby, you can find: Lecturer Room of Dr. Liew Wei Shiung, Lecturer Room of Associate Prof. Dr. Suraya binti Hamid. The nearest male and female toilet (washroom) for Dr. Amirrudin Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Dr. Muhammad Faiz bin Mohd Zaki (also known as Dr. Faiz Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Dr. Suzan Jabbar Obaiys. The nearest male and female toilet (washroom) for Dr. Faiz Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+The location named Lecturer Room of Dr. Suzan Jabbar Obaiys (also known as Dr. Suzan Office) is located at Block B First Floor. Nearby, you can find: Lecturer Room of Dr. Muhammad Faiz bin Mohd Zaki. The nearest male and female toilet (washroom) for Dr. Suzan Office is located at Block B First Floor, beside Dr. Nazean Office and Dr. Liew Wei Shiung Office.
+
+
+
+
+The location named Stroustrop Lab 1 (also known as MS1) is located at Block B Second Floor. In Malay, it is called Makmal Stroustrop Satu. It is typically used for the following purpose: Lab for classes or tutorials. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Mohamad Nizam bin Ayub. The nearest male and female toilet (washroom) for Stroustrop Lab 1 is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+There is a water dispenser in front of the Lecturer Room of Associate Prof. Dr. Nor Aniza binti Abdullah.
+
+The location named Lecturer Room of Associate Prof. Dr. Nor Aniza binti Abdullah is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Dr. Asmiza binti Abdul Sani. The nearest male and female toilet (washroom) for Dr. Nor Aniza Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Dr. Asmiza binti Abdul Sani (also known as Dr. Asmiza Office) is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Nor Aniza binti Abdullah, Lecturer Room of Prof. Ts. Miss Laiha binti Mat Kiah. The nearest male and female toilet (washroom) for Dr. Asmiza Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Prof. Ts. Miss Laiha binti Mat Kiah is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Dr. Asmiza binti Abdul Sani, Lecturer Room of Madam Hannyzzura binti Pal @ Affal. The nearest male and female toilet (washroom) for Dr. Miss Laiha Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Madam Hannyzzura binti Pal @ Affal (also known as Madam Hanny Office) is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Prof. Ts. Miss Laiha binti Mat Kiah, Lecturer Room of Madam Mas Idayu binti Md Sabri. The nearest male and female toilet (washroom) for Madam Hannyzzura Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Madam Mas Idayu binti Md Sabri is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Madam Hannyzzura binti Pal @ Affal, Lecturer Room of Madam Nornazlita binti Hussin. The nearest male and female toilet (washroom) for Madam Mas Idayu Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Madam Nornazlita binti Hussin is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Madam Idayu binti Md Sabri, Lecturer Room of Dr. Muhammad Shahreeza Sarifuz bin Kassim. The nearest male and female toilet (washroom) for Madam Nornazlita Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Dr. Muhammad Shahreeza Sarifuz bin Kassim is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Madam Nornazlita binti Hussin, Lecturer Room of Dr. Unaizah Hanum binti Obaidellah. The nearest male and female toilet (washroom) for Dr. Shahreeza Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Dr. Unaizah Hanum binti Obaidellah is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Dr. Muhammad Shahreeza Sarifuz bin Kassim, Lecturer Room of Ts. Dr. Mohd Shahrul Nizam bin Mohd Danuri. The nearest male and female toilet (washroom) for Dr. Unaizah Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Ts. Dr. Mohd Shahrul Nizam bin Mohd Danuri is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Dr. Unaizah Hanum binti Obaidellah, Lecturer Room of Dr. Woo Chaw Seng. The nearest male and female toilet (washroom) for Dr. Shahrul Nizam Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Dr. Woo Chaw Seng is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Ts. Dr. Mohd Shahrul Nizam bin Mohd Danuri, Lecturer Room of Associate Prof. Dr. Mohamad Nizam bin Ayub. The nearest male and female toilet (washroom) for Dr. Woo Chaw Seng Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Associate Prof. Dr. Mohamad Nizam bin Ayub is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Dr. Woo Chaw Seng. The nearest male and female toilet (washroom) for Dr. Mohamad Nizamn Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Prof. Dr. Mohd Yamani Idna bin Idris (also known as Dr. Yamani Office) is located at Block B Second Floor. Nearby, you can find: Stroustrop Lab 1. The nearest male and female toilet (washroom) for Dr. Yamani Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+There is a toilet area right opposite of the Lecturer Room of Associate Prof. Dr. Siti Hafizah binti AB Hamid. There are toilets for male and female. It is located at Block B Second Floor.
+
+The location named Lecturer Room of Associate Prof. Dr. Siti Hafizah binti AB Hamid is located at Block B Second Floor. Nearby, you can find: Toilet, Lecturer Room of Dr. Hema A/P Subramaniam. The nearest male and female toilet (washroom) for Dr. Siti Hafizah Office is located at Block B Second Floor, right opposite it.
+
+The location named Lecturer Room of Dr. Hema A/P Subramaniam (also known as Dr. Hema Office) is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Siti Hafizah binti AB Hamid, Lecturer Room of Associate Prof. Dr. Maizatul Akmar binti Ismail. The nearest male and female toilet (washroom) for Dr. Hema Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Associate Prof. Dr. Maizatul Akmar binti Ismail (also known as Dr. Maizatul Office) is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Dr. Hema A/P Subramaniam, Lecturer Room of Prof. Ts. Dr. Nor Nadrul Anuar bin Juma'at. The nearest male and female toilet (washroom) for Dr. Maizatul Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Prof. Ts. Dr. Nor Nadrul Anuar bin Juma'at (also known as Dr. Badrul Office) is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Maizatul Akmar binti Ismail, Lecturer Room of Associate Prof. Dr. Tey Kok Soon. The nearest male and female toilet (washroom) for Dr. Nor Nadrul Anuar Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Associate Prof. Dr. Tey Kok Soon (also known as Dr. Tey Office) is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Prof. Ts. Dr. Nor Nadrul Anuar bin Juma'at, Lecturer Room of Dr. Erma Rahayu binti Mohd Faizal Abdullah. The nearest male and female toilet (washroom) for Dr. Tey Kok Soon Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Dr. Erma Rahayu binti Mohd Faizal Abdullah (also known as Dr. Erma Office) is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Tey Kok Soon. The nearest male and female toilet (washroom) for Dr. Erma Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Prof. Dr. Abdullah bin Gani is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Tey Kok Soon, Lecturer Room of Prof. Ts. Dr. Rafidah binti Md Noor. The nearest male and female toilet (washroom) for Dr. Abdullaj Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Prof. Ts. Dr. Rafidah binti Md Noor is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Prof. Dr. Abdullah bin Gani, Lecturer Room of Associate Prof. Dr. Tutut Herawan. The nearest male and female toilet (washroom) for Dr. Rafidah Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Associate Prof. Dr. Tutut Herawan (also known as Dr. Tutut Office) is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Prof. Ts. Dr. Rafidah binti Md Noor. The nearest male and female toilet (washroom) for Dr. Tutut Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Associate Prof. Dr. Rosli bin Salleh is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Ts. Dr. Sri Devi A/P Ravana, Stairs. The nearest male and female toilet (washroom) for Dr. Rosli Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Associate Prof. Ts. Dr. Sri Devi A/P Ravana is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Rosli bin Salleh, Lecturer Room of Associate Prof. Dr. Norjihan binti Abdul Gani. The nearest male and female toilet (washroom) for Dr. Sri Devi Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Associate Prof. Dr. Norjihan binti Abdul Gani (also known as Dr. Norjihan Office) is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Ts. Dr. Sri Devi A/P Ravana, Lecturer Room of Prof. Ts. Dr. Ainuddin Wahid bin Adbul Wahab. The nearest male and female toilet (washroom) for Dr. Norjihan Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+The location named Lecturer Room of Prof. Ts. Dr. Ainuddin Wahid bin Adbul Wahab is located at Block B Second Floor. Nearby, you can find: Lecturer Room of Associate Prof. Dr. Norjihan binti Abdul Gani. The nearest male and female toilet (washroom) for Dr. Ainuddin Office is located at Block B Second Floor, opposite Dr. Siti Hafizah Office.
+
+

@@ -1,0 +1,5 @@
+string query
+string[] history_user
+string[] history_bot
+---
+string answer

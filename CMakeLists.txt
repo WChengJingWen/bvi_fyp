@@ -7,7 +7,17 @@ project(bvi_fyp)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  rospy
+  std_msgs
+  actionlib
+  actionlib_msgs
+  geometry_msgs
+  moveit_commander
+  moveit_msgs
+  std_srvs
+)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -49,6 +59,13 @@ find_package(catkin REQUIRED)
 #   Message2.msg
 # )
 
+add_service_files(
+  FILES
+  stt.srv
+  tts.srv
+  rag.srv
+)
+
 ## Generate services in the 'srv' folder
 # add_service_files(
 #   FILES
@@ -68,6 +85,14 @@ find_package(catkin REQUIRED)
 #   DEPENDENCIES
 #   std_msgs  # Or other packages containing msgs
 # )
+
+generate_messages(
+  DEPENDENCIES
+  actionlib_msgs
+  geometry_msgs
+  moveit_msgs
+  std_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -101,7 +126,7 @@ find_package(catkin REQUIRED)
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES bvi_fyp
-#  CATKIN_DEPENDS other_catkin_pkg
+ CATKIN_DEPENDS actionlib actionlib_msgs geometry_msgs moveit_commander moveit_msgs roscpp rospy std_msgs std_srvs message_runtime
 #  DEPENDS system_lib
 )
 
@@ -113,7 +138,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
-# ${catkin_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
