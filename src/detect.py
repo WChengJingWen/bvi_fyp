@@ -48,7 +48,6 @@ class CaneDetection:
         self.speak(
             "Hello. I am your faculty navigation guide robot. "
             "I am now scanning for blind or visually impaired individuals with a guide cane. "
-            "If you need assistance, please stand in front of me."
         )
 
         # ========= SUBSCRIBER CREATED LAST =========
@@ -82,6 +81,7 @@ class CaneDetection:
 
         rospy.loginfo(f"[FOLLOW-ME] BVI target selected at image center: ({cx}, {cy})")
         rospy.loginfo("[FOLLOW-ME] Here you would call your follow-me service with this target.")
+        
 
         # Example (pseudo-code):
         # req = FollowMeRequest()
@@ -90,6 +90,7 @@ class CaneDetection:
         # resp = self.follow_me_client(req)
 
         self.follow_started = True
+        os.system("rosrun bvi_fyp voice_qa.py")
 
     def image_callback(self, msg_color):
 

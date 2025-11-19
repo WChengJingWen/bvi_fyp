@@ -164,44 +164,27 @@ class DeepgramUtils:
     
     def audio2text(self, timeout=10, listen_phrase="", use_punctuation_end=False):
         """
-        Convert audio to text using streaming WebSocket API with automatic speech detection
-        
-        Args:
-            timeout (int): Maximum time to listen in seconds
-            listen_phrase (str): Phrase to announce before listening
-            use_punctuation_end (bool): If True, immediately use interim results ending with punctuation.
-                                      If False, wait for final results from Deepgram.
-            
-        Returns:
-            str: Transcribed text or None if no speech detected
+        Simplified: just record from microphone for `timeout` seconds
+        and send as a single WAV to Deepgram (REST API).
+
+        This avoids streaming/VAD weirdness that can cut off the start
+        or make short answers like 'yes'/'no' unreliable.
         """
         try:
-            # Try WebSocket with reasonable timeout
-            rospy.logdebug("Attempting WebSocket connection for speech recognition")
-            try:
-                # Run the streaming transcription
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-                result = loop.run_until_complete(self._stream_audio_to_websocket(timeout, use_punctuation_end))
-                loop.close()
-                
-                if result is not None and result.strip():
-                    rospy.loginfo(f"WebSocket transcription successful: {result}")
-                    return result
-                else:
-                    rospy.loginfo("WebSocket returned empty result, falling back to REST API")
-                    
-            except Exception as e:
-                rospy.loginfo(f"WebSocket attempt failed: {e}, falling back to REST API")
-            
-            # If WebSocket fails, fall back to REST API
-            rospy.loginfo("Using REST API for transcription")
-            return self._audio2text_microphone(timeout)
-                
+            rospy.loginfo(f"[DG STT] Recording from microphone for up to {timeout} seconds...")
+            text = self._audio2text_microphone(timeout)
+            if text and text.strip():
+                rospy.loginfo(f"[DG STT] Final transcript (REST mic): '{text}'")
+                return text
+            else:
+                rospy.logwarn("[DG STT] Empty transcript from REST mic path.")
+                return ""
         except Exception as e:
-            rospy.logerr(f"Audio2text error: {e}")
-            self._text2audio_rest("I'm experiencing technical difficulties. Please try speaking again.")
+            rospy.logerr(f"[DG STT] audio2text error: {e}")
+            # Optional: speak a short error, or just return ""
+            # self._text2audio_rest("I'm experiencing technical difficulties. Please try speaking again.")
             return ""
+
     
     async def _stream_audio_to_websocket(self, timeout=10, use_punctuation_end=False):
         """

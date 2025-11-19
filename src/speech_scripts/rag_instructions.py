@@ -13,7 +13,6 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 
-
 # ---------- OpenAI key setup ----------
 
 # Your custom env var name
@@ -112,10 +111,16 @@ bvi_instruction = (
     "'Do you need me to guide you there?'\n"
     "Use ONLY the information provided in the retrieved documents. "
     "If the location is mentioned in any document, provide all available details clearly, even if brief. "
+    "If user didn't mention about toilet, please remove the information about the nearest toilet from the answer. "
     "If there is truly no mention of the location at all, then and only then say: "
     "'I'm sorry, I do not have information about that.' "
-    "Be friendly, concise, and avoid repeating irrelevant disclaimers."
+    "Be friendly, concise, and avoid repeating irrelevant disclaimers. "
+    "At the very end of your response, add a separate line exactly in this format: "
+    "'DESTINATION_TAG: <location_or_NONE>'. "
+    "Use a short location name suitable for navigation (e.g. 'Stroustrup Lab 1', 'Lecture Hall 1', 'Tutorial Room 2'), "
+    "and use 'NONE' if no specific destination should be used for navigation."
 )
+
 
 
 # ---------- Public API ----------
