@@ -30,9 +30,7 @@ class DeepgramServices:
 
         rospy.loginfo("Deepgram SR (/speech_to_text) and TTS (/text_to_speech) services ready.")
 
-    # =============================
-    #   FALLBACK: GOOGLE SR
-    # =============================
+    # Fallback: Google sr
     def google_sr_fallback(self, timeout=5, phrase_time_limit=8):
         """Use SpeechRecognition + Google Web API as a fallback SR."""
         rospy.logwarn("Falling back to Google Speech Recognition...")
@@ -62,9 +60,7 @@ class DeepgramServices:
 
         return ""
 
-    # =============================
-    #   FALLBACK: gTTS
-    # =============================
+    # Fallback: gtts
     def google_tts_fallback(self, text, lang="en"):
         """Use gTTS + system player as a fallback TTS."""
         if not text or not text.strip():
@@ -103,9 +99,7 @@ class DeepgramServices:
             rospy.logerr(f"gTTS fallback error: {e}")
             return False
 
-    # =============================
-    #   SR SERVICE HANDLER
-    # =============================
+    # SR service handler
     def handle_sr(self, req):
         """
         Service handler for speech recognition.
@@ -133,9 +127,7 @@ class DeepgramServices:
 
         return sttResponse(text=text, success=success)
 
-    # =============================
-    #   TTS SERVICE HANDLER
-    # =============================
+    # TTS service handler
     def handle_tts(self, req):
         """
         Service handler for text-to-speech.

@@ -56,7 +56,7 @@ class VoiceQANode:
         resp = self.rag_client(req)
         return resp.answer
 
-    # -------- simple navigation intent detector (direct commands) --------
+    # Nav ques detect
     def detect_navigation_intent(self, text):
         """
         Detect if the user is directly asking for navigation guidance
@@ -90,14 +90,14 @@ class VoiceQANode:
 
         return False, ""
 
-    # -------- helper: check if RAG ended with guide question --------
+    # Check whether RAG answers a navigation ques
     def answer_ends_with_guide_question(self, answer: str) -> bool:
         if not answer:
             return False
         trimmed = answer.strip()
         return trimmed.lower().endswith("do you need me to guide you there?")
 
-    # -------- helper: extract DESTINATION_TAG from RAG answer --------
+    # Extract dest from RAG answer
     def extract_destination_from_answer(self, raw_answer: str):
         """
         Look for a line like 'DESTINATION_TAG: <...>' in the answer.
@@ -143,7 +143,7 @@ class VoiceQANode:
                 self.speak("Goodbye.")
                 break
 
-            # ---- 1) Direct navigation command → nav mock + break ----
+            # 1) Direct navigation command → nav mock + break
             is_nav, destination = self.detect_navigation_intent(user_text)
             if is_nav:
                 rospy.loginfo(f"[NAV-INTENT] User requested navigation to: {destination}")
@@ -153,7 +153,7 @@ class VoiceQANode:
                 rate.sleep()
                 break
 
-            # ---- 2) Otherwise, treat it as a question → call RAG ----
+            # 2) Otherwise, treat it as a question → call RAG
             raw_answer = self.ask_rag(user_text)
             rospy.loginfo(f"RAG raw answer: {raw_answer}")
 
@@ -172,11 +172,11 @@ class VoiceQANode:
             # Speak RAG answer (without DESTINATION_TAG line)
             self.speak(answer)
 
-            # ---- 3) If RAG ended with 'Do you need me to guide you there?' → yes/no branch ----
+            # 3) If RAG ended with 'Do you need me to guide you there?' → yes/no branch
             if self.answer_ends_with_guide_question(answer):
                 # clarify we want yes/no
                 self.speak("Please answer with yes or no.")
-                rospy.sleep(1.0)  # small pause so user can start speaking
+                # rospy.sleep(1.0) 
 
                 max_retries = 2
                 confirm = None
@@ -200,8 +200,6 @@ class VoiceQANode:
 
                 confirm_lower = confirm.lower()
                 rospy.loginfo(f"[NAV-CONFIRM] User said: {confirm}")
-                # ... yes/no logic continues here
-
 
                 yes_words = ["yes", "yeah", "ya", "yup", "sure", "please", "ok", "okay"]
                 no_words = ["no", "nope", "nah"]
@@ -216,7 +214,7 @@ class VoiceQANode:
                     rospy.loginfo(f"[NAV-START] Starting navigation (from RAG flow) to: {destination}")
                     print(f"[NAVIGATION MOCK] Starting navigation to: {destination}")
                     self.speak("Okay, I will guide you to"+destination+"now.")
-                    # later: call real nav service here
+                    # call real nav service here
                     rate.sleep()
                     break
 
@@ -227,7 +225,7 @@ class VoiceQANode:
                     continue
 
                 else:
-                    # ambiguous answer → treat as no for now
+                    # ambiguous answer → treat as no 
                     self.speak("I did not hear a clear yes, so I will not start navigation. Do you have more questions?")
                     rate.sleep()
                     continue

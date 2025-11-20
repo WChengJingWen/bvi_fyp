@@ -13,9 +13,7 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 
-# ---------- OpenAI key setup ----------
-
-# Your custom env var name
+# Open ai key
 OPENAI_ENV_NAME = "OPENAI_API_KEY_WNI"
 
 _openai_key = os.getenv(OPENAI_ENV_NAME)
@@ -25,11 +23,11 @@ if not _openai_key:
         f"Run:  export {OPENAI_ENV_NAME}='sk-xxxx'"
     )
 
-# LangChain / langchain-openai expects OPENAI_API_KEY
+# LangChain
 os.environ["OPENAI_API_KEY"] = _openai_key
 
 
-# ---------- Paths for data & FAISS index ----------
+# Dataset and database setup
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 # Adjust if your txt file is elsewhere
@@ -57,8 +55,6 @@ def _load_text_chunks(path: str) -> List[str]:
     return unique_texts
 
 
-# ---------- Build / load FAISS index ----------
-
 embedding_model = OpenAIEmbeddings()
 
 if os.path.isdir(FAISS_DIR):
@@ -78,7 +74,7 @@ else:
     print("📚 FAISS index created and saved")
 
 
-# ---------- Retriever + QA chain ----------
+# Retrieval and QA Chain
 
 retriever = db.as_retriever(
     search_type="mmr",
@@ -95,7 +91,7 @@ qa_chain = RetrievalQA.from_chain_type(
     retriever=retriever,
 )
 
-# ---------- Instruction prompt ----------
+# Prompt
 
 bvi_instruction = (
     "You are a friendly and helpful campus guide robot assisting blind or visually impaired students. "
@@ -123,7 +119,6 @@ bvi_instruction = (
 
 
 
-# ---------- Public API ----------
 
 def answer_query(user_query: str, chat_history: List[Tuple[str, str]]) -> str:
     """

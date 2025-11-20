@@ -15,7 +15,6 @@ class CaneDetection:
     def __init__(self):
         rospy.init_node('cane_detection')
 
-        # ========= FLAGS & STATE FIRST =========
         self.stop_on_cane = False
         self.CONFIDENCE_THRESHOLD = 0.7
         self.cv_image = None
@@ -28,12 +27,12 @@ class CaneDetection:
         self.save_dir = "/home/mustar/catkin_ws/src/bvi_fyp/src/image_detected"
         os.makedirs(self.save_dir, exist_ok=True)
 
-        # ========= MODELS & BRIDGE =========
+        # Load models
         self.model_cane = ultralytics.YOLO('/home/mustar/catkin_ws/src/bvi_fyp/src/model/cane_best.pt')
         self.model_person = ultralytics.YOLO('yolov8n.pt')  # COCO model
         self.bridge = CvBridge()
 
-        # ========= SPEECH SERVICES (before subscriber!) =========
+        # Speech services
         rospy.loginfo("Waiting for /speech_to_text, /text_to_speech")
         rospy.wait_for_service("/speech_to_text")
         rospy.wait_for_service("/text_to_speech")
@@ -44,13 +43,13 @@ class CaneDetection:
         rospy.loginfo("Speech services ready.")
         rospy.loginfo("Continuous cane detection node started.")
 
-        # 🔊 Intro message
+        # Intro message
         self.speak(
             "Hello. I am your faculty navigation guide robot. "
             "I am now scanning for blind or visually impaired individuals with a guide cane. "
         )
 
-        # ========= SUBSCRIBER CREATED LAST =========
+        # Image subscriber
         image_topic = rospy.get_param('~image_topic', '/camera/color/image_raw')
         self.sub = rospy.Subscriber(image_topic, Image, self.image_callback, queue_size=1)
 
@@ -94,7 +93,6 @@ class CaneDetection:
 
     def image_callback(self, msg_color):
 
-        # If we already decided to stop detection (and follow-me is running), just return
         if self.stop_on_cane:
             return
 
@@ -112,32 +110,35 @@ class CaneDetection:
         results_cane = self.model_cane(self.cv_image)
         cane_boxes = results_cane[0].boxes
 
-        results_person = self.model_person(self.cv_image)
+        results_person = self.model_person(self.cv_image, classes=[0])
         person_boxes = results_person[0].boxes
 
         persons = []
         canes = []
 
-        # -------------------------
-        # PROCESS PERSON DETECTIONS
-        # -------------------------
-        for box in person_boxes:
+        # Person detection with IDs
+        for pid, box in enumerate(person_boxes):
             conf = box.conf.item()
             cls_id = int(box.cls.item())
 
-            if conf >= self.CONFIDENCE_THRESHOLD and cls_id == 0:  # class 0 = person
+            if conf >= self.CONFIDENCE_THRESHOLD and cls_id == 0: 
                 xyxy = box.xyxy.numpy().flatten()
                 x1, y1, x2, y2 = map(float, xyxy)
-                persons.append((x1, y1, x2, y2))
+                # store (id, bbox)
+                persons.append((pid, x1, y1, x2, y2))
 
-                # Draw green box
+                # Draw green box + ID text
                 cv2.rectangle(self.cv_image, (int(x1), int(y1)), (int(x2), int(y2)), (0,255,0), 2)
-                cv2.putText(self.cv_image, f"person {conf:.2f}", (int(x1), int(y1)-10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
-
-        # -------------------------
-        # PROCESS CANE DETECTIONS
-        # -------------------------
+                cv2.putText(
+                    self.cv_image,
+                    f"id {pid} {conf:.2f}",        
+                    (int(x1), int(y1)-10),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.6,
+                    (0,255,0),
+                    2
+                )
+        # Cane detection
         for box in cane_boxes:
             conf = box.conf.item()
             cls_id = int(box.cls.item())
@@ -153,56 +154,73 @@ class CaneDetection:
                 cv2.putText(self.cv_image, f"cane {conf:.2f}", (int(x1), int(y1)-10),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0), 2)
 
-        # -------------------------
-        # CHECK PERSON WITH CANE
-        # -------------------------
+        # Person cane intersection
         person_with_cane = False
-        bvi_person_box = None  # NEW: store the exact person we want to follow
+        bvi_person_box = None  
+
+        # Person cane intersection - choose person with highest overlap
+        bvi_person_box = None
+        bvi_person_id = None 
+        best_overlap = 0.0  # track max overlap area
 
         if persons and canes:
-            for (px1, py1, px2, py2) in persons:
+            for (pid, px1, py1, px2, py2) in persons:
                 for (cx1, cy1, cx2, cy2) in canes:
                     cane_cx = 0.5 * (cx1 + cx2)
                     cane_cy = 0.5 * (cy1 + cy2)
 
-                    # cane must be horizontally inside person body
-                    if (px1 <= cane_cx <= px2) and (cane_cy >= py1):
-                        person_with_cane = True
-                        bvi_person_box = (px1, py1, px2, py2)
-                        break
-                if person_with_cane:
-                    break
+                    # Optional: keep your original constraint
+                    if not (px1 <= cane_cx <= px2) or cane_cy < py1:
+                        continue
 
-        # -------------------------
-        # SAVE, SELECT TARGET & START FOLLOW
-        # -------------------------
+                    # Compute intersection between person box and cane box
+                    ix1 = max(px1, cx1)
+                    iy1 = max(py1, cy1)
+                    ix2 = min(px2, cx2)
+                    iy2 = min(py2, cy2)
+
+                    iw = max(0.0, ix2 - ix1)
+                    ih = max(0.0, iy2 - iy1)
+                    overlap = iw * ih
+
+                    if overlap > best_overlap:
+                        best_overlap = overlap
+                        bvi_person_box = (px1, py1, px2, py2)
+                        bvi_person_id = pid  
+
+        person_with_cane = bvi_person_box is not None
+
+        # Speech
         if person_with_cane and not self.follow_started:
             rospy.loginfo("PERSON WITH CANE DETECTED! Saving and starting follow-me logic...")
+
+            # Show detection
+            cv2.imshow("Cane Detection", self.cv_image)
+            cv2.waitKey(100)
 
             self.speak(
                     "Excuse me. I have detected a person with a guide cane. "
                     "Can you please stop walking and stand still? I will approach you now."
                 )
 
-            # Save image (same as before)
+            # Save image 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             save_path = f"{self.save_dir}/person_cane_{timestamp}.jpg"
             cv2.imwrite(save_path, self.cv_image)
             rospy.loginfo(f"Saved image at {save_path}")
 
-            # NEW: store this person as the BVI target and start follow-me
+            # Srote target user coordinates
             self.bvi_target_box = bvi_person_box
             self.start_follow_target(self.bvi_target_box)
-            print("target bvi individual coordinate: ", px1, px2, py1, py2)
 
-            # If you want to completely stop this node’s detection after that:
+            x1, y1, x2, y2 = self.bvi_target_box
+            print("BVI person ID:", bvi_person_id)
+            print("target bvi individual coordinate: ", x1, y1, x2, y2)
+
             self.stop_on_cane = True
             return
 
-        # Show detection
-        cv2.imshow("Cane Detection", self.cv_image)
-        cv2.waitKey(1)
-
+        
 
 if __name__ == "__main__":
     try:
