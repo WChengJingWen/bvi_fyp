@@ -16,12 +16,6 @@ from langchain.chains import RetrievalQA
 # Open ai key
 OPENAI_ENV_NAME = "OPENAI_API_KEY_WNI"
 
-_openai_key = os.getenv(OPENAI_ENV_NAME)
-if not _openai_key:
-    raise RuntimeError(
-        f"{OPENAI_ENV_NAME} is not set in the environment. "
-        f"Run:  export {OPENAI_ENV_NAME}='sk-xxxx'"
-    )
 
 # LangChain
 os.environ["OPENAI_API_KEY"] = _openai_key
@@ -55,8 +49,9 @@ def _load_text_chunks(path: str) -> List[str]:
     return unique_texts
 
 
-embedding_model = OpenAIEmbeddings()
-
+embedding_model = OpenAIEmbeddings(
+    model="text-embedding-3-small"
+)
 if os.path.isdir(FAISS_DIR):
     # Load existing FAISS index
     print(f"📚 Loading existing FAISS index from {FAISS_DIR}")
@@ -79,8 +74,8 @@ else:
 retriever = db.as_retriever(
     search_type="mmr",
     search_kwargs={
-        "k": 5,          # number of final docs
-        "fetch_k": 15,   # candidates
+        "k": 2,          # number of final docs
+        "fetch_k": 5,   # candidates
         "lambda_mult": 0.25,  # relevance vs diversity
     },
 )
@@ -108,6 +103,7 @@ bvi_instruction = (
     "Use ONLY the information provided in the retrieved documents. "
     "If the location is mentioned in any document, provide all available details clearly, even if brief. "
     "If user didn't mention about toilet, please remove the information about the nearest toilet from the answer. "
+    "If user didn't mention about nearby rooms, please remove the information about the nearby rooms from the answer. "
     "If there is truly no mention of the location at all, then and only then say: "
     "'I'm sorry, I do not have information about that.' "
     "Be friendly, concise, and avoid repeating irrelevant disclaimers. "

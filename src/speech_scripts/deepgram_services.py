@@ -110,7 +110,7 @@ class DeepgramServices:
 
         text = ""
         try:
-            text = audio2text(timeout=10, listen_phrase="Please speak now.", use_punctuation_end=False)
+            text = audio2text(timeout=5, listen_phrase="Please speak now.", use_punctuation_end=False)
         except Exception as e:
             rospy.logerr(f"Deepgram SR raised exception: {e}")
             text = ""
