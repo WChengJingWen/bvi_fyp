@@ -16,10 +16,10 @@ from langchain.chains import RetrievalQA
 # Open ai key
 OPENAI_ENV_NAME = "OPENAI_API_KEY_WNI"
 
+_openai_key = os.getenv(OPENAI_ENV_NAME)
 
 # LangChain
 os.environ["OPENAI_API_KEY"] = _openai_key
-
 
 # Dataset and database setup
 

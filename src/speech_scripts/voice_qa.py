@@ -95,7 +95,7 @@ class VoiceQANode:
         if not answer:
             return False
         trimmed = answer.strip()
-        return trimmed.lower().endswith("do you need me to guide you there?")
+        return trimmed.lower().endswith("need me to guide you there?")
 
     # Extract dest from RAG answer
     def extract_destination_from_answer(self, raw_answer: str):
@@ -123,6 +123,12 @@ class VoiceQANode:
 
         clean_answer = "\n".join(new_lines).strip()
         return clean_answer, dest
+    
+    def validate_location_with_rag(self, location):
+        query = f"Is '{location}' a valid location in the faculty? Answer yes or no only."
+        resp = self.ask_rag(query)
+        print(resp)
+        return "yes" in resp.lower()
 
     def main_loop(self):
         # simple loop: listen → answer → speak
@@ -147,9 +153,17 @@ class VoiceQANode:
             is_nav, destination = self.detect_navigation_intent(user_text)
             if is_nav:
                 rospy.loginfo(f"[NAV-INTENT] User requested navigation to: {destination}")
+
+                # Location Validation
+                if not self.validate_location_with_rag(destination):
+                    self.speak(f"Sorry, I couldn't find the location {destination}. "
+                            "Please ask about campus locations or try again.")
+                    continue
+
+                # If valid → proceed
                 print(f"[NAVIGATION MOCK] Starting navigation to: {destination}")
                 self.speak(f"Okay, I will guide you to {destination}.")
-                # later: call real nav service here
+                # call real nav service here later
                 rate.sleep()
                 break
 
