@@ -23,7 +23,7 @@ class CaneDetection:
         self.bvi_target_box = None   # (x1, y1, x2, y2)
         self.follow_started = False
 
-        self.dist_threshold_m = rospy.get_param("~target_distance_threshold_m", 2.0)  # only lock target if <= 2m
+        self.dist_threshold_m = rospy.get_param("~target_distance_threshold_m", 3.0)  # only lock target if <= 2m
         self.depth_topic_enabled = rospy.get_param("~use_depth", True)
 
         self.depth_image = None
@@ -274,7 +274,7 @@ class CaneDetection:
             cv2.waitKey(100)
 
             self.speak(
-                    "Excuse me. I have detected a person with a guide cane. "
+                    "Excuse me. I have detected a person with a guide cane. Hello, I am your faculty guide robot."
                     "Can you please stop walking and stand still? I will approach you now."
                 )
 

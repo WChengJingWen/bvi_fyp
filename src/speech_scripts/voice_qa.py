@@ -95,7 +95,7 @@ class VoiceQANode:
         if not answer:
             return False
         trimmed = answer.strip()
-        return trimmed.lower().endswith("need me to guide you there?")
+        return trimmed.lower().endswith("me to guide you there?")
 
     # Extract dest from RAG answer
     def extract_destination_from_answer(self, raw_answer: str):
