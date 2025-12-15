@@ -23,6 +23,12 @@ class CaneDetection:
         self.bvi_target_box = None   # (x1, y1, x2, y2)
         self.follow_started = False
 
+        self.dist_threshold_m = rospy.get_param("~target_distance_threshold_m", 2.0)  # only lock target if <= 2m
+        self.depth_topic_enabled = rospy.get_param("~use_depth", True)
+
+        self.depth_image = None
+        self.depth_encoding = None
+
         # Save directory
         self.save_dir = "/home/mustar/catkin_ws/src/bvi_fyp/src/image_detected"
         os.makedirs(self.save_dir, exist_ok=True)
@@ -52,6 +58,11 @@ class CaneDetection:
         # Image subscriber
         image_topic = rospy.get_param('~image_topic', '/camera/color/image_raw')
         self.sub = rospy.Subscriber(image_topic, Image, self.image_callback, queue_size=1)
+        if self.depth_topic_enabled:
+            depth_topic = rospy.get_param('~depth_topic', '/camera/depth/image_raw')
+            self.depth_sub = rospy.Subscriber(depth_topic, Image, self.depth_callback, queue_size=1)
+            rospy.loginfo(f"Subscribed to depth topic: {depth_topic}")
+
 
     def speak(self, text):
         try:
@@ -91,6 +102,57 @@ class CaneDetection:
         self.follow_started = True
         os.system("rosrun bvi_fyp voice_qa.py")
 
+    # Calculate target user distance
+    def depth_callback(self, msg_depth):
+        try:
+            # "passthrough" keeps original encoding (16UC1 or 32FC1)
+            depth = self.bridge.imgmsg_to_cv2(msg_depth, desired_encoding="passthrough")
+            depth = np.flip(depth, axis=1)
+            self.depth_image = depth
+            self.depth_encoding = msg_depth.encoding  # e.g. "16UC1" or "32FC1"
+        except CvBridgeError as e:
+            rospy.logwarn(str(e))
+            self.depth_image = None
+
+    def estimate_bbox_distance_m(self, bbox):
+        """
+        Return distance in meters using MEDIAN depth inside the bbox ROI.
+        This matches your FollowPerson approach (median over bbox area).
+        Returns None if invalid.
+        """
+        if self.depth_image is None:
+            return None
+
+        x1, y1, x2, y2 = map(int, bbox)
+        h, w = self.depth_image.shape[:2]
+
+        # clamp bbox to image bounds
+        x1 = max(0, min(w - 1, x1))
+        x2 = max(0, min(w,     x2))
+        y1 = max(0, min(h - 1, y1))
+        y2 = max(0, min(h,     y2))
+
+        if x2 <= x1 or y2 <= y1:
+            return None
+
+        roi = self.depth_image[y1:y2, x1:x2].astype(np.float32)
+
+        # remove invalid depth
+        roi = roi[np.isfinite(roi)]
+        roi = roi[roi > 0]
+
+        if roi.size == 0:
+            return None
+
+        d = float(np.median(roi)) 
+
+        # unit conversion
+        if self.depth_encoding and "16UC1" in self.depth_encoding:
+            d = d / 1000.0  # mm -> m
+        # if 32FC1, it's usually already meters
+
+        return d
+    
     def image_callback(self, msg_color):
 
         if self.stop_on_cane:
@@ -188,7 +250,20 @@ class CaneDetection:
                         bvi_person_box = (px1, py1, px2, py2)
                         bvi_person_id = pid  
 
-        person_with_cane = bvi_person_box is not None
+        if bvi_person_box is not None:
+            dist_m = self.estimate_bbox_distance_m(bvi_person_box)
+
+            if dist_m is None:
+                rospy.logwarn("Depth unavailable/invalid -> ignoring candidate.")
+            elif dist_m <= self.dist_threshold_m:
+                person_with_cane = True
+                rospy.loginfo(
+                    f"BVI within range: {dist_m:.2f}m (<= {self.dist_threshold_m:.2f}m)"
+                )
+            else:
+                rospy.loginfo(
+                    f"BVI detected but too far: {dist_m:.2f}m > {self.dist_threshold_m:.2f}m"
+                )
 
         # Speech
         if person_with_cane and not self.follow_started:
@@ -219,7 +294,6 @@ class CaneDetection:
 
             self.stop_on_cane = True
             return
-
         
 
 if __name__ == "__main__":
