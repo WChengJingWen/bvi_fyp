@@ -1,13 +1,27 @@
 #!/usr/bin/env python3
 
+#!/usr/bin/env python3
+import os, sys
 import rospy
 from bvi_fyp.srv import stt, sttRequest
 from bvi_fyp.srv import tts, ttsRequest
 from bvi_fyp.srv import rag, ragRequest
 
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.abspath(os.path.join(THIS_DIR, ".."))
+if SRC_DIR not in sys.path:
+    sys.path.insert(0, SRC_DIR)
+
+from ui.ui_publisher import UIPublisher
+
+
 class VoiceQANode:
     def __init__(self):
         rospy.init_node("voice_rag_node")
+
+        self.ui = UIPublisher()
+        self.ui.init()
+        self.ui.publish_state(page="chat", status="ready")
 
         # Keep a short chat history in memory
         self.history_user = []
@@ -28,6 +42,8 @@ class VoiceQANode:
             "I have successfully reached near the user. Dear user, I am your faculty guide robot. "
             "You can ask me for any faculty location related questions or ask for a navigation guide to your destination."
         )
+        self.ui.publish_chat("robot", "Dear user, I am your faculty guide robot. "
+            "You can ask me for any faculty location related questions or ask for a navigation guide to your destination.")
         self.main_loop()
 
     def speak(self, text):
@@ -137,16 +153,22 @@ class VoiceQANode:
         rate = rospy.Rate(0.1)  # e.g. one iteration every 10 seconds
         while not rospy.is_shutdown():
             self.speak("Please ask your question, or say 'exit' to stop.")
+            self.ui.publish_chat("robot", "Please ask your question, or say 'exit' to stop.")
+
             user_text = self.listen()
+            
             if not user_text:
                 self.speak("Sorry, I did not hear anything.")
+                self.ui.publish_chat("robot", "Sorry, I did not hear anything.")
                 continue
 
             rospy.loginfo(f"User said: {user_text}")
+            self.ui.publish_chat("user", user_text)
 
             # ---- exit / stop ----
             if user_text.lower() in ["exit", "quit", "stop"]:
                 self.speak("Goodbye.")
+                self.ui.publish_chat("robot", "Goodbye.")
                 break
 
             # 1) Direct navigation command → nav mock + break
@@ -158,12 +180,20 @@ class VoiceQANode:
                 if not self.validate_location_with_rag(destination):
                     self.speak(f"Sorry, I couldn't find the location {destination}. "
                             "Please ask about campus locations or try again.")
+                    self.ui.publish_chat("robot", f"Sorry, I couldn't find the location {destination}. "
+                            "Please ask about campus locations or try again.")
                     continue
 
                 # If valid → proceed
                 print(f"[NAVIGATION MOCK] Starting navigation to: {destination}")
                 self.speak(f"Okay, I will guide you to {destination}.")
+                self.ui.publish_chat("robot", f"Okay, I will guide you to {destination}.")
                 # call real nav service here later
+
+                self.ui.publish_state(page="status", status="navigating", destination=destination)
+                rospy.sleep(5)
+                self.speak(f"We have successfully reached the {destination}.")
+                self.ui.publish_state(page="status", status="navigation_completed", destination=destination)
                 rate.sleep()
                 break
 
@@ -184,12 +214,14 @@ class VoiceQANode:
                 self.history_bot = self.history_bot[-5:]
 
             # Speak RAG answer (without DESTINATION_TAG line)
+            self.ui.publish_chat("robot", answer)
             self.speak(answer)
-
+            
             # 3) If RAG ended with 'Do you need me to guide you there?' → yes/no branch
             if self.answer_ends_with_guide_question(answer):
                 # clarify we want yes/no
                 self.speak("Please answer with yes or no.")
+                self.ui.publish_chat("robot", "Please answer with yes or no.")
                 # rospy.sleep(1.0) 
 
                 max_retries = 2
@@ -201,6 +233,7 @@ class VoiceQANode:
                         break
                     rospy.loginfo(f"[NAV-CONFIRM] Empty result on attempt {attempt+1}")
                     self.speak("Sorry, I did not catch that. Please say yes or no.")
+                    self.ui.publish_chat("robot", "Sorry, I did not catch that. Please say yes or no.")
                     rospy.sleep(1.0)
 
                 if not confirm:
@@ -209,11 +242,14 @@ class VoiceQANode:
                         "I still did not hear a clear answer, so I will not start navigation. "
                         "Do you have more questions?"
                     )
+                    self.ui.publish_chat("robot", "I still did not hear a clear answer, so I will not start navigation. "
+                        "Do you have more questions?")
                     rate.sleep()
                     continue
 
                 confirm_lower = confirm.lower()
                 rospy.loginfo(f"[NAV-CONFIRM] User said: {confirm}")
+                self.ui.publish_chat("user", confirm)
 
                 yes_words = ["yes", "yeah", "ya", "yup", "sure", "please", "ok", "okay"]
                 no_words = ["no", "nope", "nah"]
@@ -228,12 +264,18 @@ class VoiceQANode:
                     rospy.loginfo(f"[NAV-START] Starting navigation (from RAG flow) to: {destination}")
                     print(f"[NAVIGATION MOCK] Starting navigation to: {destination}")
                     self.speak("Okay, I will guide you to"+destination+"now.")
+                    self.ui.publish_chat("robot", "Okay, I will guide you to"+destination+"now.")
                     # call real nav service here
+                    self.ui.publish_state(page="status", status="navigating", destination=destination)
+                    rospy.sleep(5)
+                    self.speak(f"We have successfully reached the {destination}.")
+                    self.ui.publish_state(page="status", status="navigation_completed", destination=destination)
                     rate.sleep()
                     break
 
                 elif any(w in confirm_lower for w in no_words):
                     self.speak("Okay, I will not start navigation. Do you have more questions?")
+                    self.ui.publish_chat("robot", "Okay, I will not start navigation. Do you have more questions?")
                     # loop back for next question
                     rate.sleep()
                     continue
@@ -241,6 +283,7 @@ class VoiceQANode:
                 else:
                     # ambiguous answer → treat as no 
                     self.speak("I did not hear a clear yes, so I will not start navigation. Do you have more questions?")
+                    self.ui.publish_chat("robot", "I did not hear a clear yes, so I will not start navigation. Do you have more questions?")
                     rate.sleep()
                     continue
 
