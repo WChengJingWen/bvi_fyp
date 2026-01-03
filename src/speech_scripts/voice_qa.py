@@ -141,7 +141,22 @@ class VoiceQANode:
         return clean_answer, dest
     
     def validate_location_with_rag(self, location):
-        query = f"Is '{location}' a valid location in the faculty? Answer yes or no only."
+        query = f"""
+        You MUST answer using ONLY the retrieved context.
+        Do NOT use any outside knowledge or assumptions.
+
+        Task:
+        Determine whether the retrieved context explicitly contains a location matching: "{location}"
+        Matching can be exact or an obvious alias (e.g., "Tutorial 1" vs "Tutorial Room 1" vs "Bilik Tutorial 1" vs "BT1").
+
+        Output format (exactly one line):
+        VALID: YES
+        or
+        VALID: NO
+        or
+        VALID: UNKNOWN  (if the context does not mention it clearly)
+        """
+
         resp = self.ask_rag(query)
         print(resp)
         return "yes" in resp.lower()

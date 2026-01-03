@@ -57,17 +57,17 @@ st.markdown(
 )
 
 # ---------- header ----------
-col1, col2, col3 = st.columns([3, 1, 1])
-with col1:
-    st.title("🤖 Campus Guide Robot")
-with col2:
-    st.write("**Page:**", page)
-    st.write("**Status:**", status)
-with col3:
-    if last_update_age is None:
-        st.caption("No state file yet")
-    else:
-        st.caption(f"Last update: {last_update_age:.1f}s ago")
+# col1, col2, col3 = st.columns([3, 1, 1])
+# with col1:
+st.title("🤖 Campus Guide Robot for Blind/Visually Impaired Users")
+# with col2:
+#     st.write("**Page:**", page)
+#     st.write("**Status:**", status)
+# with col3:
+#     if last_update_age is None:
+#         st.caption("No state file yet")
+#     else:
+#         st.caption(f"Last update: {last_update_age:.1f}s ago")
 
 st.divider()
 
