@@ -23,6 +23,7 @@ import ssl
 import asyncio
 import aiohttp
 from threading import Event
+import webrtcvad
 
 class DeepgramUtils:
     """
@@ -71,6 +72,9 @@ class DeepgramUtils:
         
         # Initialize PyAudio for microphone input
         self.p = pyaudio.PyAudio()
+
+        # Add TTS playback lock to prevent overlapping audio
+        self.tts_lock = threading.Lock()
         
         rospy.loginfo("Deepgram REST API utilities initialized successfully")
         self._initialized = True
@@ -88,15 +92,15 @@ class DeepgramUtils:
             rospy.logwarn("Empty text provided to text2audio")
             return
         
-        try:
-            self._text2audio_rest(text)
-        except Exception as e:
-            rospy.logerr(f"Deepgram TTS error: {e}")
+        with self.tts_lock:
+            try:
+                self._text2audio_rest(text)
+            except Exception as e:
+                rospy.logerr(f"Deepgram TTS error: {e}")
     
     def _text2audio_rest(self, text):
-        """Convert text to speech using Deepgram REST API"""
+        """Convert text to speech using Deepgram REST API with streaming playback"""
         try:
-            # Prepare request
             headers = {
                 "Authorization": f"Token {self.api_key}",
                 "Content-Type": "application/json"
@@ -104,8 +108,13 @@ class DeepgramUtils:
             
             payload = {"text": text}
             
-            # Make request with model parameter
-            params = {"model": self.tts_model}
+            # Add streaming parameters
+            params = {
+                "model": self.tts_model,
+                "encoding": "linear16",  # Raw PCM for faster processing
+                "sample_rate": 24000,
+                "container": "none"  # No container overhead
+            }
             
             response = requests.post(
                 self.tts_url,
@@ -113,26 +122,13 @@ class DeepgramUtils:
                 json=payload,
                 params=params,
                 stream=True,
-                timeout=30
+                timeout=10  # Reduced timeout
             )
             
             response.raise_for_status()
             
-            # Create temporary file for audio
-            with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as temp_file:
-                temp_filename = temp_file.name
-                
-                # Write audio data to file
-                for chunk in response.iter_content(chunk_size=1024):
-                    if chunk:
-                        temp_file.write(chunk)
-            
-            # Play the audio file
-            self._play_audio_file(temp_filename)
-            
-            # Clean up
-            if os.path.exists(temp_filename):
-                os.remove(temp_filename)
+            # Stream and play audio directly without saving to file
+            self._play_audio_stream(response)
                 
         except requests.exceptions.RequestException as e:
             rospy.logerr(f"Deepgram TTS API error: {e}")
@@ -140,7 +136,7 @@ class DeepgramUtils:
         except Exception as e:
             rospy.logerr(f"Deepgram TTS general error: {e}")
             raise
-    
+        
     def _play_audio_file(self, filename):
         """Play audio file using available system players"""
         try:
@@ -161,31 +157,131 @@ class DeepgramUtils:
             
         except Exception as e:
             rospy.logerr(f"Audio playback error: {e}")
-    
-    def audio2text(self, timeout=10, listen_phrase="", use_punctuation_end=False):
-        """
-        Simplified: just record from microphone for `timeout` seconds
-        and send as a single WAV to Deepgram (REST API).
 
-        This avoids streaming/VAD weirdness that can cut off the start
-        or make short answers like 'yes'/'no' unreliable.
-        """
+    def _play_audio_stream(self, response):
+        """Play audio stream directly using PyAudio (no file saving)"""
+        stream = None
         try:
-            rospy.loginfo(f"[DG STT] Recording from microphone for up to {timeout} seconds...")
-            text = self._audio2text_microphone(timeout)
+            # Initialize PyAudio stream for playback
+            stream = self.p.open(
+                format=pyaudio.paInt16,
+                channels=1,
+                rate=24000,  # Match the sample_rate in params
+                output=True,
+                frames_per_buffer=4096
+            )
+            
+            rospy.loginfo("Streaming TTS audio...")
+            
+            # Stream and play audio chunks as they arrive
+            for chunk in response.iter_content(chunk_size=4096):
+                if chunk and not rospy.is_shutdown():
+                    stream.write(chunk)
+            
+            # CRITICAL: Wait for buffer to finish playing
+            # This ensures the last words aren't cut off
+            time.sleep(0.5)  # Small delay to let buffer drain
+            
+            rospy.loginfo("TTS playback complete")
+            
+        except Exception as e:
+            rospy.logerr(f"Audio streaming playback error: {e}")
+        finally:
+            # Always cleanup stream
+            if stream is not None:
+                try:
+                    stream.stop_stream()
+                    stream.close()
+                except:
+                    pass
+    
+
+    def _record_audio_with_vad(self, max_duration=10, silence_duration=1.5):
+        """Record audio with Voice Activity Detection to stop on silence"""
+        try:
+            vad = webrtcvad.Vad(2)  # Aggressiveness: 0-3 (2 is balanced)
+            
+            stream = self.p.open(
+                format=self.audio_format,
+                channels=self.channels,
+                rate=self.sample_rate,
+                input=True,
+                frames_per_buffer=480  # 30ms chunks for VAD
+            )
+            
+            rospy.loginfo("Recording with VAD (speak now)...")
+            
+            frames = []
+            speech_started = False
+            silence_chunks = 0
+            silence_threshold = int(silence_duration * self.sample_rate / 480)
+            
+            start_time = time.time()
+            
+            while time.time() - start_time < max_duration:
+                if rospy.is_shutdown():
+                    break
+                
+                # Read 30ms chunk (required for VAD)
+                chunk = stream.read(480, exception_on_overflow=False)
+                frames.append(chunk)
+                
+                # Check if speech is present
+                is_speech = vad.is_speech(chunk, self.sample_rate)
+                
+                if is_speech:
+                    speech_started = True
+                    silence_chunks = 0
+                elif speech_started:
+                    silence_chunks += 1
+                    
+                    # Stop if we've had enough silence after speech
+                    if silence_chunks > silence_threshold:
+                        rospy.loginfo(f"Silence detected after {time.time() - start_time:.1f}s")
+                        break
+            
+            stream.stop_stream()
+            stream.close()
+            
+            return b''.join(frames)
+            
+        except Exception as e:
+            rospy.logerr(f"VAD recording error: {e}")
+            return None
+
+    def audio2text(self, timeout=10, listen_phrase="", use_punctuation_end=False):
+        """Speech recognition with VAD for faster response"""
+        try:
+            rospy.loginfo(f"[DG STT] Recording with VAD (max {timeout}s)...")
+            
+            # Record with VAD - stops early on silence
+            audio_data = self._record_audio_with_vad(timeout, silence_duration=1.5)
+            
+            if not audio_data:
+                rospy.logwarn("No audio recorded")
+                return ""
+            
+            # Save and transcribe
+            with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+                temp_filename = temp_file.name
+                self._save_audio_to_wav(audio_data, temp_filename)
+            
+            text = self._transcribe_audio_file(temp_filename)
+            
+            if os.path.exists(temp_filename):
+                os.remove(temp_filename)
+            
             if text and text.strip():
-                rospy.loginfo(f"[DG STT] Final transcript (REST mic): '{text}'")
+                rospy.loginfo(f"[DG STT] Transcript: '{text}'")
                 return text
             else:
-                rospy.logwarn("[DG STT] Empty transcript from REST mic path.")
                 return ""
+                
         except Exception as e:
-            rospy.logerr(f"[DG STT] audio2text error: {e}")
-            # Optional: speak a short error, or just return ""
-            # self._text2audio_rest("I'm experiencing technical difficulties. Please try speaking again.")
+            rospy.logerr(f"[DG STT] error: {e}")
             return ""
 
-    
+        
     async def _stream_audio_to_websocket(self, timeout=10, use_punctuation_end=False):
         """
         Stream audio to Deepgram WebSocket for real-time transcription
