@@ -69,20 +69,6 @@ class NavToPoint:
         rospy.loginfo("Starting navigation node...")
         rospy.sleep(1)
 
-        # Get initial location
-        # quaternion = quaternion_from_euler(0.0, 0.0, 0.0)
-        # self.origin = Pose(Point(0, 0, 0), Quaternion(quaternion[0], quaternion[1], quaternion[2], quaternion[3]))
-        # --------------------------------------------------------------------------
-
-        # Predefined named locations with their corresponding coordinates and orientations
-        '''
-        How to get location?
-        ## Run the navigation with your map first
-        ## Control the robot to the locations that you wanna save
-        ## Run `rostopic echo /amcl_pose` to get the coodinate x, y and orientation z, w
-        ## Update the locations
-        '''
-
         # Thread safety
         self.file_lock = Lock()
 
@@ -96,31 +82,6 @@ class NavToPoint:
         #     'shelf': Pose(Point(1.3398, 0.6447, 0), Quaternion(0, 0, 0.5642, 0.8256)),
         #     'front door': Pose(Point(-2.725, -0.4970, 0), Quaternion(0, 0, -0.6906, 0.7232)),
         #     'backdoor': Pose(Point(-2.2345, 4.2042, 0), Quaternion(0, 0, 0.9504, 0.3107))
-        
-            # 'bag_location': Pose(Point(0.39160446336239296, -0.5161442605907655, 0), Quaternion(0, 0, 0.01574806059039607, 0.9998759916047796)),
-            # 'start_point': Pose(Point(0.24595393153346543, 0.0490977198374147, 0), Quaternion(0, 0, 0.800840237438781, 0.5988780460987002)),
-            # 'living_room': Pose(Point(0.17685625779139647, 0.47992523468894727, 0), Quaternion(0, 0, 0.7532693005546219, 0.6577122173427756)),
-            # 'bedroom': Pose(Point(0.20386362237733346, -0.05311959611005832, 0), Quaternion(0, 0, -0.704544922359989, 0.7096593918047989)),
-            # 'kitchen': Pose(Point(1.530233187266717, 0.8213574583047445, 0), Quaternion(0, 0, 0.6731516763193642, 0.7395044426292718)),
-            # 'study_room': Pose(Point(0.20386362237733346, -0.05311959611005832, 0), Quaternion(0, 0, -0.704544922359989, 0.7096593918047989)),
-            # 'entrance': Pose(Point(0.20386362237733346, -0.05311959611005832, 0), Quaternion(0, 0, -0.704544922359989, 0.7096593918047989)),
-            # 'trash_bin': Pose(Point(0.20386362237733346, -0.05311959611005832, 0), Quaternion(0, 0, -0.704544922359989, 0.7096593918047989)),
-
-            # 'maker_chair': Pose(Point(4.806, 0.4116, 0), Quaternion(0, 0, -0.1347, 0.9908)),
-            # 'maker_table': Pose(Point(4.4608, -2.0033, 0), Quaternion(0, 0, -0.7158, 0.6982)),
-            # 'kitchen': Pose(Point(4.7412, -0.54295, 0), Quaternion(0, 0,-0.3371, 0.9414)),
-            # 'Shelf1': Pose(Point(4.1618, -1.5304, 0), Quaternion(0, 0, 0.9976, 0.2170)),
-            # 'Shelf2': Pose(Point(4.1781, -1.1627, 0), Quaternion(0, 0, -0.9992,  0.03939)),
-            # 'Shelf3': Pose(Point(4.24252, -0.8534, 0), Quaternion(0, 0,  -0.9984, 0.05482)),
-            # 'RedTable': Pose(Point(5.2189, -1.2945, 0), Quaternion(0, 0, -0.6971, 0.7169)),
-            # 'table1': Pose(Point(5.0133, -0.4718, 0), Quaternion(0, 0, 0.6557, 0.7549)),
-            # 'table2': Pose(Point(5.7666, -0.5163, 0), Quaternion(0, 0, 0.6296, 0.7768)),
-            # 'halfway': Pose(Point(2.9546, 0.8705, 0), Quaternion(0, 0, -0.7496, 0.6618)),
-            # 'entrance recpt': Pose(Point(0.5808, 1.1929, 0), Quaternion(0, 0, 0.99790, 0.06462)),
-            # 'seat_find': Pose(Point(1.1175, -0.1197, 0), Quaternion(0, 0, -0.5155, 0.8568)),
-            # 'direct_sofa': Pose(Point(2.2832, -0.1862, 0), Quaternion(0, 0, -0.6013, 0.7989)),
-            # 'blue_seat': Pose(Point(0.8119, -1.650, 0), Quaternion(0, 0, -0.5293, 0.84837))
-        # }
 
         # --------------------------------------------------------------------------
         # Start a ROS service called 'navigate' to receive navigation requests

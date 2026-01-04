@@ -6,9 +6,6 @@ import tf2_ros
 import tf2_geometry_msgs
 from bvi_fyp.srv import BVIBoundingBox, BVIBoundingBoxResponse
 
-# Import your senior's navigation module
-from bvi_fyp.navigation import nav_to_target_user
-
 class HandleBoundingBox:
     def __init__(self):
         rospy.init_node("handle_bounding_box_node")
