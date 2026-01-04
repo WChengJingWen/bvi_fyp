@@ -14,6 +14,7 @@ from nav_msgs.msg import Path
 import math
 from bvi_fyp.srv import tts, ttsRequest
 from threading import Lock
+import tf.transformations
 
 
 
@@ -36,6 +37,9 @@ class NavToPoint:
         # Wait for the action server to become available
         self.move_base.wait_for_server(rospy.Duration(120))
         rospy.loginfo("Connected to move base server.")
+
+        # Publisher for goal visualization
+        self.goal_publisher = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size=10)
 
         # Subscribe to RViz initial pose topic to set robot's starting location
         initial_pose = PoseWithCovarianceStamped()
@@ -141,20 +145,24 @@ class NavToPoint:
                     self.checkpoints = valid_checkpoints
                     
                     # First notify about the total number of checkpoints
-                    self.publish_status(f"Loaded {len(self.checkpoints)} checkpoints")
+                    rospy.loginfo(f"Loaded {len(self.checkpoints)} checkpoints")
+                    # self.publish_status(f"Loaded {len(self.checkpoints)} checkpoints")
                     
                     # Then broadcast each checkpoint individually
                     rospy.sleep(0.5)  # Give subscribers time to connect
                     for name, data in self.checkpoints.items():
-                        self.publish_status(f"checkpoint:{name}:{json.dumps(data)}")
+                        rospy.loginfo(f"checkpoint:{name}:{json.dumps(data)}")
+                        # self.publish_status(f"checkpoint:{name}:{json.dumps(data)}")
                         rospy.sleep(0.1)  # Small delay between messages to ensure delivery
                 else:
                     self.checkpoints = {}
-                    self.publish_status("Starting with empty checkpoint list")
+                    rospy.loginfo(f"Starting with empty checkpoint list")
+
+                    # self.publish_status("Starting with empty checkpoint list")
             except Exception as e:
                 rospy.logerr(f"Error loading checkpoints: {e}")
                 self.checkpoints = {}
-                self.publish_status(f"Error loading checkpoints: {e}")
+                # self.publish_status(f"Error loading checkpoints: {e}")
 
     def validate_checkpoint(self, checkpoint_data):
         """Validate checkpoint data structure"""
@@ -217,9 +225,7 @@ class NavToPoint:
             self.publish_motion_audio(motion)
 
     def publish_motion_audio(self, motion):
-        if motion == "straight":
-            self.tts_client(ttsRequest(text="Go straight"))
-        elif motion == "left":
+        if motion == "left":
             self.tts_client(ttsRequest(text="Turning left"))
         elif motion == "right":
             self.tts_client(ttsRequest(text="Turning right"))
@@ -243,6 +249,60 @@ class NavToPoint:
         
         return pose
     
+    def nav_to_target_user(self, point_map):
+            
+        if self.is_navigating:
+            rospy.logwarn("Already navigating. Cancel current goal first.")
+            return False
+            
+        # Create PoseStamped from PointStamped
+        pose = PoseStamped()
+        pose.header = point_map.header
+        pose.pose.position = point_map.point
+        
+        # Set orientation (facing the target)
+        try:
+            current_pose = self.get_current_pose()
+            if current_pose:
+                dx = pose.pose.position.x - current_pose.pose.position.x
+                dy = pose.pose.position.y - current_pose.pose.position.y
+                yaw = math.atan2(dy, dx)
+                quaternion = tf.transformations.quaternion_from_euler(0, 0, yaw)
+                pose.pose.orientation.x = quaternion[0]
+                pose.pose.orientation.y = quaternion[1]
+                pose.pose.orientation.z = quaternion[2]
+                pose.pose.orientation.w = quaternion[3]
+            else:
+                pose.pose.orientation.w = 1.0
+        except Exception as e:
+            rospy.logwarn(f"Could not calculate orientation: {e}")
+            pose.pose.orientation.w = 1.0
+            
+        # Create and send goal
+        goal = MoveBaseGoal()
+        goal.target_pose = pose
+        
+        try:
+            rospy.loginfo("Navigating to detected target")
+            # self.publish_status("navigating to detected target")
+            self.is_navigating = True
+            
+            # Publish for visualization
+            self.goal_publisher.publish(pose)
+            
+            # Send goal to move_base
+            self.move_base.send_goal(
+                goal,
+                done_cb=self.navigation_done_callback,
+                feedback_cb=self.navigation_feedback_callback
+            )
+            return True
+        except Exception as e:
+            rospy.logerr(f"Error sending goal to detected target: {e}")
+            # self.publish_status("error: failed to send goal to target")
+            self.is_navigating = False
+            return False
+        
     def nav_to_point(self, request):
         """
         Service callback to navigate the robot to the requested location.
@@ -282,17 +342,8 @@ class NavToPoint:
 
         rospy.loginfo(f"Going to {pose}")
 
-        # Rotate 180 degrees in-place before starting navigation
-        try:
-            self.rotate_in_place(math.pi)
-        except Exception as e:
-            rospy.logwarn(f"Rotation before navigation failed: {e}")
-
-        self.tts_client(ttsRequest(text="Please grab the handle and follow me"))
-
-        # Wait for 5 seconds
-        rospy.loginfo("Waiting for 5 seconds, let user grab handle...")
-        rospy.sleep(5)
+        self.tts_client(ttsRequest(text="Please follow the beep sound to the destination."))
+        # self.publish_status(f"navigating to {target}")
 
         self.move_base.send_goal(self.goal)
         self.is_navigating = True
@@ -327,43 +378,14 @@ class NavToPoint:
             except:
                 pass
             rospy.loginfo("Navigation cancelled")
-            self.publish_status("navigation cancelled")
+            # self.publish_status("navigation cancelled")
             self.is_navigating = False
 
-        def rotate_in_place(self, angle, angular_speed=0.2):
-            """Rotate the robot in-place by `angle` radians at `angular_speed` (rad/s).
-            Positive angle = counter-clockwise. This uses `/cmd_vel` to command rotation.
-            """
-            # Normalize angle to [-pi, pi]
-            angle = self.normalize_angle(angle)
-
-            # Determine rotation direction
-            direction = 1.0 if angle >= 0 else -1.0
-            target_angle = abs(angle)
-
-            twist = Twist()
-            twist.linear.x = 0.0
-            twist.linear.y = 0.0
-            twist.linear.z = 0.0
-            twist.angular.x = 0.0
-            twist.angular.y = 0.0
-
-            rate = rospy.Rate(10)
-            start_time = rospy.Time.now()
-            duration = rospy.Duration(target_angle / angular_speed)
-
-            twist.angular.z = direction * abs(angular_speed)
-
-            # Publish until desired rotation time elapsed
-            while rospy.Time.now() - start_time < duration and not rospy.is_shutdown():
-                self.cmd_vel_pub.publish(twist)
-                rate.sleep()
-
-            # Stop rotation
-            twist.angular.z = 0.0
-            for _ in range(3):
-                self.cmd_vel_pub.publish(twist)
-                rate.sleep()
+    # def publish_status(self, status):
+    #     """Publish navigation status"""
+    #     msg = String()
+    #     msg.data = status
+    #     self.status_pub.publish(msg)
 
     def update_initial_pose(self, initial_pose):
         """
