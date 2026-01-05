@@ -35,7 +35,7 @@ class HandleBoundingBox:
         self.bvi_target_received = True        
 
         # Convert to PointStamped
-        point_robot = self.bbox_to_point(bbox, distance_m)
+        point_robot = self.bbox_to_point(self.bvi_target_box, self.distance_m)
 
         # Transform to map, optional
         point_map = self.transform_to_map(point_robot)

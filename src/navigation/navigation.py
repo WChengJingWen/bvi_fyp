@@ -169,8 +169,8 @@ class NavToPoint:
 
         v1x = p2.x - p1.x
         v1y = p2.y - p1.y
-        v2x = p3.x - p2.x
-        v2y = p3.y - p2.y
+        v2x = p3.x - p1.x
+        v2y = p3.y - p1.y
 
         angle1 = math.atan2(v1y, v1x)
         angle2 = math.atan2(v2y, v2x)
@@ -185,17 +185,15 @@ class NavToPoint:
             motion = "right"
         else:
             return  # ignore small noisy changes
-
-        # Avoid repeating same audio cue
-        if motion != self.last_motion_state:
-            self.last_motion_state = motion
-            self.publish_motion_audio(motion)
+    
+        self.publish_motion_audio(motion)
 
     def publish_motion_audio(self, motion):
+        self.beep_pub.publish(False)
+
         if motion == "left":
             rospy.loginfo(f"turn left")
             self.speak("Turning left")
-
         elif motion == "right":
             rospy.loginfo(f"turn right")
             self.speak("Turning right")
@@ -321,7 +319,9 @@ class NavToPoint:
 
         self.move_base.send_goal(self.goal)
         self.is_navigating = True
-        self.beep_pub.publish(True)
+
+        if target != "initial_point":
+            self.beep_pub.publish(True)
 
 
         # Wait up to 300 seconds for the robot to reach the goal
@@ -353,6 +353,8 @@ class NavToPoint:
                 goal.target_pose = current_pose
                 self.move_base.send_goal(goal)
                 self.move_base.cancel_all_goals()
+                self.beep_pub.publish(False)
+
             except:
                 pass
             rospy.loginfo("Navigation cancelled")
