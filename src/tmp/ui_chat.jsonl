@@ -1,31 +1,4 @@
-{"ts": 1767421212.0471172, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767421212.0484076}
-{"ts": 1767421217.0495474, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767421217.05002}
-{"ts": 1767421223.8088984, "role": "user", "text": "Where is Lecture Theatre 1", "_received_ts": 1767421223.8095953}
-{"ts": 1767421235.254739, "role": "robot", "text": "Lecture Theater 1, also known as DK1, is located at Block B on the ground floor. It is typically used for lectures and big classes. You can find a vending machine beside the stairs, right opposite the main door of Lecture Theater 1. \n\nDo you need me to guide you there?", "_received_ts": 1767421235.2551546}
-{"ts": 1767421266.7458818, "role": "robot", "text": "Please answer with yes or no.", "_received_ts": 1767421266.7463639}
-{"ts": 1767421273.046686, "role": "user", "text": "Yes yes", "_received_ts": 1767421273.0469806}
-{"ts": 1767421278.2327387, "role": "robot", "text": "Okay, I will guide you toLecture Theater 1now.", "_received_ts": 1767421278.233037}
-{"ts": 1767422324.8787193, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767422324.8795788}
-{"ts": 1767422328.267575, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767422328.267797}
-{"ts": 1767422721.2536, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767422721.254769}
-{"ts": 1767422724.5825257, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767422724.582953}
-{"ts": 1767422932.8040886, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767422932.8047957}
-{"ts": 1767422937.0149865, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767422937.015887}
-{"ts": 1767423541.2632265, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767423541.2643952}
-{"ts": 1767423544.9742165, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767423544.9746506}
-{"ts": 1767423562.9735234, "role": "robot", "text": "Sorry, I did not hear anything.", "_received_ts": 1767423562.9745224}
-{"ts": 1767423566.6968236, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767423566.697768}
-{"ts": 1767423654.3565474, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767423654.3574488}
-{"ts": 1767423659.0326953, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767423659.033118}
-{"ts": 1767423665.341783, "role": "user", "text": "Where is Lecture Theatre 1", "_received_ts": 1767423665.3426301}
-{"ts": 1767423670.7009938, "role": "robot", "text": "Lecture Theater 1, also known as DK1, is located at Block B on the ground floor. It is typically used for lectures and big classes. There is a vending machine beside the stairs, right opposite the main door of Lecture Theater 1. \n\nDo you need me to guide you there?", "_received_ts": 1767423670.7019463}
-{"ts": 1767423693.0742502, "role": "robot", "text": "Please answer with yes or no.", "_received_ts": 1767423693.0747728}
-{"ts": 1767423699.9055274, "role": "user", "text": "Yes", "_received_ts": 1767423699.9061718}
-{"ts": 1767423704.7645602, "role": "robot", "text": "Okay, I will guide you toLecture Theater 1now.", "_received_ts": 1767423704.7651439}
-{"ts": 1767424619.4633622, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767424619.4646308}
-{"ts": 1767424624.1231673, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767424624.123602}
-{"ts": 1767424629.9753532, "role": "user", "text": "Where is Lecture Theatre 1", "_received_ts": 1767424629.9757292}
-{"ts": 1767424633.4224253, "role": "robot", "text": "Lecture Theater 1, also known as DK1, is located at Block B on the ground floor. It is typically used for lectures and big classes. You can also find a vending machine beside the stairs right opposite the main door of Lecture Theater 1. \n\nDo you need me to guide you there?", "_received_ts": 1767424633.4231124}
-{"ts": 1767424656.8920975, "role": "robot", "text": "Please answer with yes or no.", "_received_ts": 1767424656.892656}
-{"ts": 1767424661.147306, "role": "user", "text": "Yes", "_received_ts": 1767424661.1480136}
-{"ts": 1767424665.490053, "role": "robot", "text": "Okay, I will guide you toLecture Theater 1now.", "_received_ts": 1767424665.4908705}
+{"ts": 1767594934.7464223, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767594934.747855}
+{"ts": 1767594938.640395, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767594938.641157}
+{"ts": 1767594946.3723752, "role": "user", "text": "Can you guide me to tutorial Room 1?", "_received_ts": 1767594946.373506}
+{"ts": 1767594954.173721, "role": "robot", "text": "Okay, I will guide you to tutorial Room 1.", "_received_ts": 1767594954.174546}

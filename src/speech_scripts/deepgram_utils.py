@@ -255,7 +255,7 @@ class DeepgramUtils:
             rospy.loginfo(f"[DG STT] Recording with VAD (max {timeout}s)...")
             
             # Record with VAD - stops early on silence
-            audio_data = self._record_audio_with_vad(timeout, silence_duration=1.5)
+            audio_data = self._record_audio_with_vad(timeout, silence_duration=2)
             
             if not audio_data:
                 rospy.logwarn("No audio recorded")

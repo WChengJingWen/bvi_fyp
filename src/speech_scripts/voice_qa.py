@@ -166,6 +166,9 @@ class VoiceQANode:
         # self.speak("Hello, I am your campus guide robot. You can ask me about locations on campus.")
 
         rate = rospy.Rate(0.1)  # e.g. one iteration every 10 seconds
+        yes_words = ["yes", "yeah", "ya", "yup", "sure", "please", "ok", "okay"]
+        no_words = ["no", "nope", "nah"]
+
         while not rospy.is_shutdown():
             self.speak("Please ask your question, or say 'exit' to stop.")
             self.ui.publish_chat("robot", "Please ask your question, or say 'exit' to stop.")
@@ -184,7 +187,7 @@ class VoiceQANode:
             if user_text.lower() in ["exit", "quit", "stop"]:
                 self.speak("Goodbye.")
                 self.ui.publish_chat("robot", "Goodbye.")
-                break
+                break   
 
             # 1) Direct navigation command → nav mock + break
             is_nav, destination = self.detect_navigation_intent(user_text)
@@ -209,8 +212,31 @@ class VoiceQANode:
                 rospy.sleep(5)
                 self.speak(f"We have successfully reached the {destination}.")
                 self.ui.publish_state(page="status", status="navigation_completed", destination=destination)
-                rate.sleep()
-                break
+                self.speak(f"Do you have more questions or need new navigation guide? Please answer with yes or no.")
+                max_retries = 2
+                confirm = None
+
+                
+
+                for attempt in range(max_retries):
+                    confirm = self.listen()
+                    confirm_lower = confirm.lower()
+                    if any(w in confirm_lower for w in no_words):
+                        self.speak("Okay, I will return to my starting position. Hope you are satisfied with my service. Goodbye!")
+                        rate.sleep()
+                        return
+                    elif any(w in confirm_lower for w in yes_words):
+                        self.speak("Sure! What do you need from me?")
+                        rate.sleep()
+                        continue
+                    else:
+                        if attempt == 0:
+                            self.speak("I did not hear a clear answer. Please answer with yes or no.")
+                        else:
+                            self.speak("I did not hear a clear yes. I will now return to my starting position. Hope you are satisfied with my service. Goodbye!")
+                            rate.sleep()
+                            return
+              
 
             # 2) Otherwise, treat it as a question → call RAG
             raw_answer = self.ask_rag(user_text)
@@ -266,9 +292,7 @@ class VoiceQANode:
                 rospy.loginfo(f"[NAV-CONFIRM] User said: {confirm}")
                 self.ui.publish_chat("user", confirm)
 
-                yes_words = ["yes", "yeah", "ya", "yup", "sure", "please", "ok", "okay"]
-                no_words = ["no", "nope", "nah"]
-
+                
                 if any(w in confirm_lower for w in yes_words):
                     # Prefer destination from RAG; fall back to user_text as last resort
                     if dest_from_rag and dest_from_rag.upper() != "NONE":
@@ -285,8 +309,28 @@ class VoiceQANode:
                     rospy.sleep(5)
                     self.speak(f"We have successfully reached the {destination}.")
                     self.ui.publish_state(page="status", status="navigation_completed", destination=destination)
-                    rate.sleep()
-                    break
+                    self.speak(f"Do you have more questions or need new navigation guide? Please answer with yes or no.")
+                    max_retries = 2
+                    confirm = None
+
+                    for attempt in range(max_retries):
+                        confirm = self.listen()
+                        confirm_lower = confirm.lower()
+                        if any(w in confirm_lower for w in no_words):
+                            self.speak(f"Ok, I will return to my starting position. Hope you are satisfied with my service. Goodbye!")
+                            rate.sleep()
+                            break
+                        elif any(w in confirm_lower for w in yes_words):
+                            self.speak("Sure! What do you need from me?")
+                            rate.sleep()
+                            continue
+                        else:
+                            if attempt == 0:
+                                self.speak("I did not hear a clear answer. Please answer with yes or no.")
+                            else:
+                                self.speak("I did not hear a clear yes. I will now return to my starting position. Hope you are satisfied with my service. Goodbye!")
+                                rate.sleep()
+                                break
 
                 elif any(w in confirm_lower for w in no_words):
                     self.speak("Okay, I will not start navigation. Do you have more questions?")
