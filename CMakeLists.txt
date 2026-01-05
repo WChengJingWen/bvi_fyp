@@ -64,6 +64,8 @@ add_service_files(
   stt.srv
   tts.srv
   rag.srv
+  Navigate.srv
+  BVIBoundingBox.srv
 )
 
 ## Generate services in the 'srv' folder

@@ -28,32 +28,36 @@ class BeepNode:
             "/beep_control",
             Bool,
             self.beep_callback,
-            queue_size=1
         )
 
         rospy.loginfo("Beep node ready. Waiting for commands.")
+        self.run()
 
     def beep_callback(self, msg):
-        self.beep_active = msg.data
+        self.beep_active = msg
         state = "ON" if self.beep_active else "OFF"
         rospy.loginfo(f"Beep turned {state}")
 
     def run(self):
+        rospy.loginfo("in run()")
         rate = rospy.Rate(20)  # loop rate
 
         while not rospy.is_shutdown():
+            # rospy.loginfo("in beep run while loop")
             if self.beep_active:
+                # rospy.loginfo("beep active ard")
                 now = time.time()
                 if now - self.last_beep_time >= self.beep_interval:
-                    self.sound_client.beep()
+                    self.sound_client.playWave('/home/mustar/catkin_ws/src/bvi_fyp/src/navigation/beep.wav')
                     self.last_beep_time = now
 
             rate.sleep()
 
-
 if __name__ == "__main__":
     try:
-        node = BeepNode()
-        node.run()
+        BeepNode()
+        rospy.loginfo("beep node run ard")
+        rospy.spin()
+        
     except rospy.ROSInterruptException:
         pass

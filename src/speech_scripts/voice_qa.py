@@ -6,6 +6,7 @@ import rospy
 from bvi_fyp.srv import stt, sttRequest
 from bvi_fyp.srv import tts, ttsRequest
 from bvi_fyp.srv import rag, ragRequest
+from bvi_fyp.srv import Navigate
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.abspath(os.path.join(THIS_DIR, ".."))
@@ -13,7 +14,6 @@ if SRC_DIR not in sys.path:
     sys.path.insert(0, SRC_DIR)
 
 from ui.ui_publisher import UIPublisher
-
 
 class VoiceQANode:
     def __init__(self):
@@ -45,6 +45,15 @@ class VoiceQANode:
         self.ui.publish_chat("robot", "Dear user, I am your faculty guide robot. "
             "You can ask me for any faculty location related questions or ask for a navigation guide to your destination.")
         self.main_loop()
+    
+    def go_to_checkpoint(self, checkpoint_name):
+        rospy.wait_for_service('navigate')
+        try:
+            nav_service = rospy.ServiceProxy('navigate', Navigate)
+            response = nav_service(checkpoint_name)
+            print(f"Reached: {response.reach}, Message: {response.message}")
+        except rospy.ServiceException as e:
+            print(f"Service call failed: {e}")
 
     def speak(self, text):
         try:
@@ -166,9 +175,14 @@ class VoiceQANode:
         # self.speak("Hello, I am your campus guide robot. You can ask me about locations on campus.")
 
         rate = rospy.Rate(0.1)  # e.g. one iteration every 10 seconds
+        yes_words = ["yes", "yeah", "ya", "yup", "sure", "please", "ok", "okay"]
+        no_words = ["no", "nope", "nah"]
+        
+
         while not rospy.is_shutdown():
             self.speak("Please ask your question, or say 'exit' to stop.")
             self.ui.publish_chat("robot", "Please ask your question, or say 'exit' to stop.")
+            got_yes = False
 
             user_text = self.listen()
             
@@ -203,14 +217,45 @@ class VoiceQANode:
                 print(f"[NAVIGATION MOCK] Starting navigation to: {destination}")
                 self.speak(f"Okay, I will guide you to {destination}.")
                 self.ui.publish_chat("robot", f"Okay, I will guide you to {destination}.")
+                self.speak("Please follow the beep sound to the destination.")
                 # call real nav service here later
 
                 self.ui.publish_state(page="status", status="navigating", destination=destination)
-                rospy.sleep(5)
+                self.go_to_checkpoint(destination)
+
                 self.speak(f"We have successfully reached the {destination}.")
                 self.ui.publish_state(page="status", status="navigation_completed", destination=destination)
-                rate.sleep()
-                break
+                self.speak(f"Do you have more questions or need new navigation guide? Please answer with yes or no.")
+                max_retries = 2
+                confirm = None
+
+                for attempt in range(max_retries):
+                    confirm = self.listen()
+                    confirm_lower = confirm.lower()
+                    if any(w in confirm_lower for w in no_words):
+                        self.speak("Okay, I will return to my starting position. Hope you are satisfied with my service. Goodbye!")
+                        self.ui.publish_state(page="status", status="going_back")
+                        self.go_to_checkpoint("shelf")
+                        self.ui.publish_state(page="status", status="idle")
+                        rate.sleep()
+                        return
+                    elif any(w in confirm_lower for w in yes_words):
+                        self.speak("Sure! What do you need from me?")
+                        got_yes = True
+                        break
+                    else:
+                        if attempt == 0:
+                            self.speak("I did not hear a clear answer. Please answer with yes or no.")
+                        else:
+                            self.speak("I did not hear a clear yes. I will now return to my starting position. Hope you are satisfied with my service. Goodbye!")
+                            self.ui.publish_state(page="status", status="going_back")
+                            self.go_to_checkpoint("shelf")
+                            self.ui.publish_state(page="status", status="idle")
+                            rate.sleep()
+                            return
+              
+            if got_yes:
+                continue
 
             # 2) Otherwise, treat it as a question → call RAG
             raw_answer = self.ask_rag(user_text)
@@ -266,9 +311,7 @@ class VoiceQANode:
                 rospy.loginfo(f"[NAV-CONFIRM] User said: {confirm}")
                 self.ui.publish_chat("user", confirm)
 
-                yes_words = ["yes", "yeah", "ya", "yup", "sure", "please", "ok", "okay"]
-                no_words = ["no", "nope", "nah"]
-
+                
                 if any(w in confirm_lower for w in yes_words):
                     # Prefer destination from RAG; fall back to user_text as last resort
                     if dest_from_rag and dest_from_rag.upper() != "NONE":
@@ -279,14 +322,48 @@ class VoiceQANode:
                     rospy.loginfo(f"[NAV-START] Starting navigation (from RAG flow) to: {destination}")
                     print(f"[NAVIGATION MOCK] Starting navigation to: {destination}")
                     self.speak("Okay, I will guide you to"+destination+"now.")
-                    self.ui.publish_chat("robot", "Okay, I will guide you to"+destination+"now.")
+                    self.ui.publish_chat("robot", "Okay, I will guide you to"+ destination +"now.")
+                    self.speak("Please follow the beep sound to the destination.")
                     # call real nav service here
                     self.ui.publish_state(page="status", status="navigating", destination=destination)
-                    rospy.sleep(5)
+                    self.go_to_checkpoint(destination)
+
                     self.speak(f"We have successfully reached the {destination}.")
                     self.ui.publish_state(page="status", status="navigation_completed", destination=destination)
-                    rate.sleep()
-                    break
+
+                    got_yes_after_nav = False
+                    self.speak(f"Do you have more questions or need new navigation guide? Please answer with yes or no.")
+                    max_retries = 2
+                    confirm = None
+
+                    for attempt in range(max_retries):
+                        confirm = self.listen()
+                        confirm_lower = confirm.lower()
+                        if any(w in confirm_lower for w in no_words):
+                            self.speak(f"Okay, I will return to my starting position. Hope you are satisfied with my service. Goodbye!")
+                            self.ui.publish_state(page="status", status="going_back")
+                            self.go_to_checkpoint("shelf")
+                            self.ui.publish_state(page="status", status="idle")
+                            rate.sleep()
+                            return
+                        elif any(w in confirm_lower for w in yes_words):
+                            self.speak("Sure! What do you need from me?")
+                            got_yes_after_nav = True
+                            rate.sleep()
+                            break
+                        else:
+                            if attempt == 0:
+                                self.speak("I did not hear a clear answer. Please answer with yes or no.")
+                            else:
+                                self.speak("I did not hear a clear yes. I will now return to my starting position. Hope you are satisfied with my service. Goodbye!")
+                                self.ui.publish_state(page="status", status="going_back")
+                                self.go_to_checkpoint("shelf")
+                                self.ui.publish_state(page="status", status="idle")
+                                rate.sleep()
+                                return
+                
+                if got_yes_after_nav:
+                    continue
 
                 elif any(w in confirm_lower for w in no_words):
                     self.speak("Okay, I will not start navigation. Do you have more questions?")

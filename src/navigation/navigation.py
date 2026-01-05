@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 import rospy
-from std_msgs.msg import String
+from std_msgs.msg import String, Bool
 import actionlib
 from actionlib_msgs.msg import *
 from geometry_msgs.msg import Twist, Pose, PoseWithCovarianceStamped, Point, Quaternion, PoseStamped
@@ -37,6 +37,9 @@ class NavToPoint:
         # Wait for the action server to become available
         self.move_base.wait_for_server(rospy.Duration(120))
         rospy.loginfo("Connected to move base server.")
+
+        # Publisher for beep sound
+        self.beep_pub = rospy.Publisher("/beep_control", Bool, queue_size=1)
 
         # Publisher for goal visualization
         self.goal_publisher = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size=10)
@@ -86,7 +89,7 @@ class NavToPoint:
         # --------------------------------------------------------------------------
         # Start a ROS service called 'navigate' to receive navigation requests
         self.service = rospy.Service('navigate', Navigate, self.nav_to_point)
-        self.tts_client = rospy.ServiceProxy("/text_to_speech", tts)
+        # self.tts_client = rospy.ServiceProxy("text_to_speech", tts)
 
 
     def load_checkpoints(self):
@@ -115,6 +118,9 @@ class NavToPoint:
                         rospy.loginfo(f"checkpoint:{name}:{json.dumps(data)}")
                         # self.publish_status(f"checkpoint:{name}:{json.dumps(data)}")
                         rospy.sleep(0.1)  # Small delay between messages to ensure delivery
+                    
+                    return valid_checkpoints
+
                 else:
                     self.checkpoints = {}
                     rospy.loginfo(f"Starting with empty checkpoint list")
@@ -187,10 +193,19 @@ class NavToPoint:
 
     def publish_motion_audio(self, motion):
         if motion == "left":
-            self.tts_client(ttsRequest(text="Turning left"))
+            rospy.loginfo(f"turn left")
+            self.speak("Turning left")
+
         elif motion == "right":
-            self.tts_client(ttsRequest(text="Turning right"))
-        
+            rospy.loginfo(f"turn right")
+            self.speak("Turning right")
+
+    def speak(self, text):
+        try:
+            self.speak(text)
+        except Exception as e:
+            rospy.logerr(f"TTS call failed: {e}")
+
     def create_pose_stamped(self, position, orientation):
         """Create a PoseStamped message"""
         pose = PoseStamped()
@@ -268,7 +283,7 @@ class NavToPoint:
         """
         Service callback to navigate the robot to the requested location.
         """
-        target = request.target_location.strip().lower()
+        target = request.target_location
 
         if target == 'stop':
             self.cancel_navigation()
@@ -292,6 +307,7 @@ class NavToPoint:
         
         self.goal = MoveBaseGoal()
         rospy.loginfo("Ready to go.")
+        
 
         # Set goal frame and timestamp
         self.goal.target_pose.header.frame_id = 'map'
@@ -299,24 +315,25 @@ class NavToPoint:
 
         # Get destination coordinates from the dictionary based on request
         # coordinate = self.locations[pose.target_location]
-        self.goal.target_pose.pose = pose
+        self.goal.target_pose = pose
 
-        rospy.loginfo(f"Going to {pose}")
-
-        self.tts_client(ttsRequest(text="Please follow the beep sound to the destination."))
-        # self.publish_status(f"navigating to {target}")
+        rospy.loginfo(f"Going to {target}")
 
         self.move_base.send_goal(self.goal)
         self.is_navigating = True
+        self.beep_pub.publish(True)
+
 
         # Wait up to 300 seconds for the robot to reach the goal
         waiting = self.move_base.wait_for_result(rospy.Duration(300))
         if waiting:
-            rospy.loginfo(f"Reached {pose}")
+            rospy.loginfo(f"Reached {target}")
             self.is_navigating = False
+            self.beep_pub.publish(False)
             return NavigateResponse(reach=True, message="Reached")
         else:
             self.is_navigating = False
+            self.beep_pub.publish(False)
             return NavigateResponse(reach=False, message="Failed to reach point")
     
     def cancel_navigation(self):

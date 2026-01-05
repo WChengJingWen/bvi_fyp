@@ -79,6 +79,7 @@ def render_status():
         "approaching": "Approaching target user…",
         "navigating": "Navigating to destination…",
         "navigation_completed": "Navigation completed ✅",
+        "going_back": "Navigating to main entrance…",
         "idle": "Idle…"
     }
     main = status_text_map.get(status, status)
