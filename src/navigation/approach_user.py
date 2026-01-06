@@ -10,7 +10,7 @@ import numpy as np
 from cv_bridge import CvBridge, CvBridgeError
 from message_filters import ApproximateTimeSynchronizer, Subscriber
 from concurrent.futures import ThreadPoolExecutor
-from bvi_fyp.msg import BVIBoundingBox, BVIBoundingBoxResponse
+from bvi_fyp.srv import BVIBoundingBox, BVIBoundingBoxResponse
 
 # max speed and turn
 
@@ -60,7 +60,7 @@ class ApproachUser:
         # Subscribe to bvi target bounding box
         self.bvi_target_box = None  # (x1, y1, x2, y2)
         self.bvi_target_received = False
-        self.bbox_sub = rospy.Service('bvi_target_bbox', BVIBoundingBox, self.bbox_callback)
+        # self.bbox_sub = rospy.Service('bvi_target_bbox', BVIBoundingBox, self.bbox_callback)
 
 
         # change follow state according to node

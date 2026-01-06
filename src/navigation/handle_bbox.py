@@ -20,12 +20,14 @@ class HandleBoundingBox:
         self.distance_m = None
         self.bvi_target_received = False
         self.bbox_sub = rospy.Service('bvi_target_bbox', BVIBoundingBox, self.update_target)
+        self.target_client = rospy.ServiceProxy('bvi_target_bbox', BVIBoundingBox, self.update_target)
+
 
         # Distance to stop before the user
         self.stop_distance = 1.0
 
         # Example loop (replace with service call or subscriber)
-        rospy.Timer(rospy.Duration(1.0), self.update_target)
+        # rospy.Timer(rospy.Duration(1.0), self.update_target)
 
     def update_target(self, msg):
         # --- Replace with actual service call ---
