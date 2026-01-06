@@ -1,4 +1,4 @@
-{"ts": 1767608301.3575792, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767608301.361008}
-{"ts": 1767608306.229692, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767608306.2300234}
-{"ts": 1767608312.7421951, "role": "user", "text": "Can you bring me to Lecture Room 1?", "_received_ts": 1767608312.743281}
-{"ts": 1767608321.1557841, "role": "robot", "text": "Okay, I will guide you to Lecture Room 1.", "_received_ts": 1767608321.158966}
+{"ts": 1767700885.543766, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767700885.5464044}
+{"ts": 1767700889.917511, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767700889.9184487}
+{"ts": 1767700896.6665523, "role": "user", "text": "I want to go to Lecture Room 1.", "_received_ts": 1767700896.6672025}
+{"ts": 1767700918.3636699, "role": "robot", "text": "Okay, I will guide you to Lecture Room 1.", "_received_ts": 1767700918.3655176}

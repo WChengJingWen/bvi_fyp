@@ -50,7 +50,7 @@ class NavToPoint:
                          self.update_initial_pose)
         
         # Subscribe to Global Planner # rostopic list, look for correct topic name
-        self.global_path_sub = rospy.Subscriber('/move_base/GlobalPlanner/plan', Path, self.global_path_callback)
+        self.global_path_sub = rospy.Subscriber('/move_base/NavfnROS/plan', Path, self.global_path_callback)
 
         # Publisher for direct velocity commands (used for in-place rotation)
         self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
@@ -89,7 +89,7 @@ class NavToPoint:
         # --------------------------------------------------------------------------
         # Start a ROS service called 'navigate' to receive navigation requests
         self.service = rospy.Service('navigate', Navigate, self.nav_to_point)
-        # self.tts_client = rospy.ServiceProxy("text_to_speech", tts)
+        self.tts_client = rospy.ServiceProxy("text_to_speech", tts)
 
 
     def load_checkpoints(self):
@@ -159,8 +159,12 @@ class NavToPoint:
         return angle
 
     def global_path_callback(self, msg: Path):
+        if not self.is_navigating:
+            return  # ignore paths if not navigating
+
         # Need at least 3 points to detect turning
         if len(msg.poses) < 3:
+            rospy.loginfo("no poses")
             return
 
         p1 = msg.poses[0].pose.position
@@ -176,10 +180,11 @@ class NavToPoint:
         angle2 = math.atan2(v2y, v2x)
         delta = self.normalize_angle(angle2 - angle1)
 
+        rospy.loginfo(delta)
+
+
         # Classification
-        if abs(delta) < math.radians(10):
-            motion = "straight"
-        elif delta > math.radians(20):
+        if delta > math.radians(20):
             motion = "left"
         elif delta < -math.radians(20):
             motion = "right"
@@ -189,7 +194,8 @@ class NavToPoint:
         self.publish_motion_audio(motion)
 
     def publish_motion_audio(self, motion):
-        self.beep_pub.publish(False)
+        # self.beep_pub.publish(False)
+        # rospy.sleep(0.2)
 
         if motion == "left":
             rospy.loginfo(f"turn left")
@@ -198,9 +204,12 @@ class NavToPoint:
             rospy.loginfo(f"turn right")
             self.speak("Turning right")
 
+        # self.beep_pub.publish(True)
+
+
     def speak(self, text):
         try:
-            self.speak(text)
+            self.tts_client(ttsRequest(text=text))
         except Exception as e:
             rospy.logerr(f"TTS call failed: {e}")
 

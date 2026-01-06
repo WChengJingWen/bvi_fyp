@@ -9,7 +9,7 @@ class Main:
 
         self.beep_pub = rospy.Publisher("/beep_control", Bool, queue_size=1, latch = True)
         rospy.loginfo("in main node")
-        self.beep_pub.publish(True)
+        # self.beep_pub.publish(True)
         rospy.loginfo("publish true")
 
 
@@ -28,6 +28,6 @@ if __name__ == "__main__":
     rospy.spin()
 
     # Change this to desired checkpoint
-    # checkpoint = "Lecture Room 1"
+    checkpoint = "shelf"
 
-    # go_to_checkpoint(checkpoint)
+    go_to_checkpoint(checkpoint)
