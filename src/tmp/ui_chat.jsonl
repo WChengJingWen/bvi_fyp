@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 {"ts": 1767594934.7464223, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767594934.747855}
 {"ts": 1767594938.640395, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767594938.641157}
 {"ts": 1767594946.3723752, "role": "user", "text": "Can you guide me to tutorial Room 1?", "_received_ts": 1767594946.373506}
 {"ts": 1767594954.173721, "role": "robot", "text": "Okay, I will guide you to tutorial Room 1.", "_received_ts": 1767594954.174546}
+=======
+{"ts": 1767774033.0899544, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767774033.0907056}
+{"ts": 1767774045.4920282, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767774045.494079}
+{"ts": 1767774057.0637593, "role": "user", "text": "Where is the office", "_received_ts": 1767774057.0644665}
+{"ts": 1767774060.6733844, "role": "robot", "text": "The office is located at block A on the ground floor. It is typically used for various offices on the ground floor. Would you like me to guide you there?", "_received_ts": 1767774060.674448}
+{"ts": 1767774070.9066167, "role": "robot", "text": "Please answer with yes or no.", "_received_ts": 1767774070.9073722}
+{"ts": 1767774080.227232, "role": "user", "text": "Yes yes", "_received_ts": 1767774080.227897}
+{"ts": 1767774080.229802, "role": "robot", "text": "Okay, I will guide you to office now.", "_received_ts": 1767774080.2313452}
+{"ts": 1767774105.358336, "role": "robot", "text": "Please ask your question, or say 'exit' to stop.", "_received_ts": 1767774105.3593023}
+{"ts": 1767774117.05337, "role": "user", "text": "Okay. I have no more questions. Sorry.", "_received_ts": 1767774117.054406}
+>>>>>>> modified ui and ui logic

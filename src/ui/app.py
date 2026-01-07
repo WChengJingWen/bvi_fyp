@@ -41,7 +41,11 @@ st.markdown(
     """
     <style>
     .big-status { font-size: 42px; font-weight: 800; }
+<<<<<<< HEAD
     .sub-status { font-size: 18px; opacity: 0.85; }
+=======
+    .sub-status { font-size: 30px; opacity: 0.85; }
+>>>>>>> modified ui and ui logic
     .chat-bubble { padding: 12px 14px; border-radius: 14px; margin: 8px 0; }
     .user {
         background: #e8f0fe;
@@ -59,7 +63,11 @@ st.markdown(
 # ---------- header ----------
 # col1, col2, col3 = st.columns([3, 1, 1])
 # with col1:
+<<<<<<< HEAD
 st.title("🤖 Campus Guide Robot for Blind/Visually Impaired Users")
+=======
+st.title("🤖 Faculty Guide Robot for Blind/Visually Impaired Users")
+>>>>>>> modified ui and ui logic
 # with col2:
 #     st.write("**Page:**", page)
 #     st.write("**Status:**", status)
@@ -79,7 +87,12 @@ def render_status():
         "approaching": "Approaching target user…",
         "navigating": "Navigating to destination…",
         "navigation_completed": "Navigation completed ✅",
+<<<<<<< HEAD
         "idle": "Idle…"
+=======
+        "idle": "Idle…",
+        "going_back": "Navigating to main entrance…"
+>>>>>>> modified ui and ui logic
     }
     main = status_text_map.get(status, status)
     st.markdown(f"<div class='big-status'>{main}</div>", unsafe_allow_html=True)
