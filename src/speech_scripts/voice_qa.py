@@ -14,10 +14,6 @@ if SRC_DIR not in sys.path:
 
 from ui.ui_publisher import UIPublisher
 
-<<<<<<< HEAD
-
-=======
->>>>>>> modified ui and ui logic
 class VoiceQANode:
     def __init__(self):
         rospy.init_node("voice_rag_node")
@@ -41,14 +37,7 @@ class VoiceQANode:
         self.rag_client = rospy.ServiceProxy("/rag_query", rag)
 
         rospy.loginfo("Voice RAG node started. Ready to chat.")
-<<<<<<< HEAD
-        self.speak(
-            "I have successfully reached near the user. Dear user, I am your faculty guide robot. "
-            "You can ask me for any faculty location related questions or ask for a navigation guide to your destination."
-        )
-        self.ui.publish_chat("robot", "Dear user, I am your faculty guide robot. "
-            "You can ask me for any faculty location related questions or ask for a navigation guide to your destination.")
-=======
+
         self.speak("I have successfully reached near the user.")
         self.ui.publish_chat("robot", "Dear user, I am your faculty guide robot. "
             "You can ask me for any faculty location related questions or ask for a navigation guide to your destination.")
@@ -56,7 +45,7 @@ class VoiceQANode:
             "You can ask me for any faculty location related questions or ask for a navigation guide to your destination."
         )
         
->>>>>>> modified ui and ui logic
+
         self.main_loop()
 
     def speak(self, text):
@@ -181,32 +170,21 @@ class VoiceQANode:
         rate = rospy.Rate(0.1)  # e.g. one iteration every 10 seconds
         yes_words = ["yes", "yeah", "ya", "yup", "sure", "please", "ok", "okay"]
         no_words = ["no", "nope", "nah"]
-<<<<<<< HEAD
 
-        while not rospy.is_shutdown():
-            self.speak("Please ask your question, or say 'exit' to stop.")
-            self.ui.publish_chat("robot", "Please ask your question, or say 'exit' to stop.")
-=======
         
-
         while not rospy.is_shutdown():
             self.ui.publish_chat("robot", "Please ask your question, or say 'exit' to stop.")
             self.speak("Please ask your question, or say 'exit' to stop.")
             
             got_yes = False
->>>>>>> modified ui and ui logic
 
             user_text = self.listen()
             
             if not user_text:
-<<<<<<< HEAD
-                self.speak("Sorry, I did not hear anything.")
-                self.ui.publish_chat("robot", "Sorry, I did not hear anything.")
-=======
+
                 self.ui.publish_chat("robot", "Sorry, I did not hear anything.")
                 self.speak("Sorry, I did not hear anything.")
                 
->>>>>>> modified ui and ui logic
                 continue
 
             rospy.loginfo(f"User said: {user_text}")
@@ -214,16 +192,11 @@ class VoiceQANode:
 
             # ---- exit / stop ----
             if user_text.lower() in ["exit", "quit", "stop"]:
-<<<<<<< HEAD
-                self.speak("Goodbye.")
-                self.ui.publish_chat("robot", "Goodbye.")
-                break   
-=======
+
                 self.ui.publish_chat("robot", "Goodbye.")
                 self.speak("Goodbye.")
                 
                 break
->>>>>>> modified ui and ui logic
 
             # 1) Direct navigation command → nav mock + break
             is_nav, destination = self.detect_navigation_intent(user_text)
@@ -231,31 +204,22 @@ class VoiceQANode:
                 rospy.loginfo(f"[NAV-INTENT] User requested navigation to: {destination}")
 
                 # Location Validation
-                if not self.validate_location_with_rag(destination):
-<<<<<<< HEAD
-                    self.speak(f"Sorry, I couldn't find the location {destination}. "
-                            "Please ask about campus locations or try again.")
-                    self.ui.publish_chat("robot", f"Sorry, I couldn't find the location {destination}. "
-                            "Please ask about campus locations or try again.")
-=======
+                if not self.validate_location_with_rag(destination)
+
                     self.ui.publish_chat("robot", f"Sorry, I couldn't find the location {destination}. "
                             "Please ask about campus locations or try again.")
                     self.speak(f"Sorry, I couldn't find the location {destination}. "
                             "Please ask about campus locations or try again.")
                     
->>>>>>> modified ui and ui logic
                     continue
 
                 # If valid → proceed
                 print(f"[NAVIGATION MOCK] Starting navigation to: {destination}")
-<<<<<<< HEAD
-                self.speak(f"Okay, I will guide you to {destination}.")
-                self.ui.publish_chat("robot", f"Okay, I will guide you to {destination}.")
-=======
+
                 self.ui.publish_chat("robot", f"Okay, I will guide you to {destination}.")
                 self.speak(f"Okay, I will guide you to {destination}.")
                 
->>>>>>> modified ui and ui logic
+
                 # call real nav service here later
 
                 self.ui.publish_state(page="status", status="navigating", destination=destination)
@@ -266,53 +230,32 @@ class VoiceQANode:
                 max_retries = 2
                 confirm = None
 
-<<<<<<< HEAD
-                
-
-=======
->>>>>>> modified ui and ui logic
                 for attempt in range(max_retries):
                     confirm = self.listen()
                     confirm_lower = confirm.lower()
                     if any(w in confirm_lower for w in no_words):
                         self.speak("Okay, I will return to my starting position. Hope you are satisfied with my service. Goodbye!")
-<<<<<<< HEAD
-=======
+
                         self.ui.publish_state(page="status", status="going_back")
                         rospy.sleep(5)
                         self.ui.publish_state(page="status", status="idle")
->>>>>>> modified ui and ui logic
                         rate.sleep()
                         return
                     elif any(w in confirm_lower for w in yes_words):
                         self.speak("Sure! What do you need from me?")
-<<<<<<< HEAD
-                        rate.sleep()
-                        continue
-=======
+
                         got_yes = True
                         self.ui.publish_state(page="chat", status="ready")
                         break
->>>>>>> modified ui and ui logic
+
                     else:
                         if attempt == 0:
                             self.speak("I did not hear a clear answer. Please answer with yes or no.")
                         else:
                             self.speak("I did not hear a clear yes. I will now return to my starting position. Hope you are satisfied with my service. Goodbye!")
-<<<<<<< HEAD
                             rate.sleep()
                             return
               
-=======
-                            self.ui.publish_state(page="status", status="going_back")
-                            rospy.sleep(5)
-                            self.ui.publish_state(page="status", status="idle")
-                            rate.sleep()
-                            return
-              
-            if got_yes:
-                continue
->>>>>>> modified ui and ui logic
 
             # 2) Otherwise, treat it as a question → call RAG
             raw_answer = self.ask_rag(user_text)
@@ -337,14 +280,11 @@ class VoiceQANode:
             # 3) If RAG ended with 'Do you need me to guide you there?' → yes/no branch
             if self.answer_ends_with_guide_question(answer):
                 # clarify we want yes/no
-<<<<<<< HEAD
-                self.speak("Please answer with yes or no.")
-                self.ui.publish_chat("robot", "Please answer with yes or no.")
-=======
+
                 self.ui.publish_chat("robot", "Please answer with yes or no.")
                 self.speak("Please answer with yes or no.")
                 
->>>>>>> modified ui and ui logic
+
                 # rospy.sleep(1.0) 
 
                 max_retries = 2
@@ -355,33 +295,24 @@ class VoiceQANode:
                     if confirm:
                         break
                     rospy.loginfo(f"[NAV-CONFIRM] Empty result on attempt {attempt+1}")
-<<<<<<< HEAD
-                    self.speak("Sorry, I did not catch that. Please say yes or no.")
-                    self.ui.publish_chat("robot", "Sorry, I did not catch that. Please say yes or no.")
-=======
+
                     self.ui.publish_chat("robot", "Sorry, I did not catch that. Please say yes or no.")
                     self.speak("Sorry, I did not catch that. Please say yes or no.")
                     
->>>>>>> modified ui and ui logic
+
                     rospy.sleep(1.0)
 
                 if not confirm:
                     rospy.loginfo("[NAV-CONFIRM] No response after retries; staying in Q&A mode.")
-<<<<<<< HEAD
-=======
+
                     self.ui.publish_chat("robot", "I still did not hear a clear answer, so I will not start navigation. "
                         "Do you have more questions?")
->>>>>>> modified ui and ui logic
+
                     self.speak(
                         "I still did not hear a clear answer, so I will not start navigation. "
                         "Do you have more questions?"
                     )
-<<<<<<< HEAD
-                    self.ui.publish_chat("robot", "I still did not hear a clear answer, so I will not start navigation. "
-                        "Do you have more questions?")
-=======
                     
->>>>>>> modified ui and ui logic
                     rate.sleep()
                     continue
 
@@ -389,11 +320,8 @@ class VoiceQANode:
                 rospy.loginfo(f"[NAV-CONFIRM] User said: {confirm}")
                 self.ui.publish_chat("user", confirm)
 
-<<<<<<< HEAD
-=======
                 got_yes_after_nav = False
 
->>>>>>> modified ui and ui logic
                 
                 if any(w in confirm_lower for w in yes_words):
                     # Prefer destination from RAG; fall back to user_text as last resort
@@ -404,24 +332,16 @@ class VoiceQANode:
 
                     rospy.loginfo(f"[NAV-START] Starting navigation (from RAG flow) to: {destination}")
                     print(f"[NAVIGATION MOCK] Starting navigation to: {destination}")
-<<<<<<< HEAD
-                    self.speak("Okay, I will guide you to"+destination+"now.")
-                    self.ui.publish_chat("robot", "Okay, I will guide you to"+destination+"now.")
-=======
                     self.ui.publish_chat("robot", f"Okay, I will guide you to {destination} now.")
                     self.speak(f"Okay, I will guide you to {destination} now.")
                     
->>>>>>> modified ui and ui logic
                     # call real nav service here
                     self.ui.publish_state(page="status", status="navigating", destination=destination)
                     rospy.sleep(5)
                     self.speak(f"We have successfully reached the {destination}.")
                     self.ui.publish_state(page="status", status="navigation_completed", destination=destination)
-<<<<<<< HEAD
-=======
 
                     got_yes_after_nav = False
->>>>>>> modified ui and ui logic
                     self.speak(f"Do you have more questions or need new navigation guide? Please answer with yes or no.")
                     max_retries = 2
                     confirm = None
@@ -430,15 +350,6 @@ class VoiceQANode:
                         confirm = self.listen()
                         confirm_lower = confirm.lower()
                         if any(w in confirm_lower for w in no_words):
-<<<<<<< HEAD
-                            self.speak(f"Ok, I will return to my starting position. Hope you are satisfied with my service. Goodbye!")
-                            rate.sleep()
-                            break
-                        elif any(w in confirm_lower for w in yes_words):
-                            self.speak("Sure! What do you need from me?")
-                            rate.sleep()
-                            continue
-=======
                             self.speak(f"Okay, I will return to my starting position. Hope you are satisfied with my service. Goodbye!")
                             self.ui.publish_state(page="status", status="going_back")
                             rospy.sleep(5)
@@ -451,25 +362,17 @@ class VoiceQANode:
                             self.ui.publish_state(page="chat", status="ready")
                             rate.sleep()
                             break
->>>>>>> modified ui and ui logic
                         else:
                             if attempt == 0:
                                 self.speak("I did not hear a clear answer. Please answer with yes or no.")
                             else:
                                 self.speak("I did not hear a clear yes. I will now return to my starting position. Hope you are satisfied with my service. Goodbye!")
-<<<<<<< HEAD
-                                rate.sleep()
-                                break
-=======
-                                self.ui.publish_state(page="status", status="going_back")
-                                rospy.sleep(5)
                                 self.ui.publish_state(page="status", status="idle")
                                 rate.sleep()
                                 return
                 
                 if got_yes_after_nav:
                     continue
->>>>>>> modified ui and ui logic
 
                 elif any(w in confirm_lower for w in no_words):
                     self.speak("Okay, I will not start navigation. Do you have more questions?")
