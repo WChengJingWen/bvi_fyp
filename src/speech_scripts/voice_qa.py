@@ -204,7 +204,7 @@ class VoiceQANode:
                 rospy.loginfo(f"[NAV-INTENT] User requested navigation to: {destination}")
 
                 # Location Validation
-                if not self.validate_location_with_rag(destination)
+                if not self.validate_location_with_rag(destination):
 
                     self.ui.publish_chat("robot", f"Sorry, I couldn't find the location {destination}. "
                             "Please ask about campus locations or try again.")
