@@ -6,7 +6,7 @@
     <node pkg="bvi_fyp" type="ui_bridge.py" name="ui_bridge" output="screen"/>
     <node pkg="bvi_fyp" type="deepgram_services.py" name="start_deepgram" output="screen"/>
     <node pkg="bvi_fyp" type="rag_service.py" name="rag_service" output="screen"/>
-    <node pkg="bvi_fyp" type="detect.py" name="start_detection" output="screen"/>
-    <!-- <node pkg="bvi_fyp" type="voice_qa.py" name="voice_conversation" output="screen"/> -->
+    <!-- <node pkg="bvi_fyp" type="detect.py" name="start_detection" output="screen"/> -->
+    <node pkg="bvi_fyp" type="voice_qa.py" name="voice_conversation" output="screen"/>
     
 </launch>

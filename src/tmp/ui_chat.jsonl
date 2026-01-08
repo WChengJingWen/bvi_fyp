@@ -1,3 +1,6 @@
-{"ts": 1767848379.723989, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767848379.727315}
-{"ts": 1767848391.2226777, "role": "robot", "text": "Please ask your question, or say 'quit' to quit.", "_received_ts": 1767848391.2235107}
-{"ts": 1767848401.7418733, "role": "user", "text": "Quit bye bye", "_received_ts": 1767848401.7420635}
+{"ts": 1767849081.296186, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767849081.2966588}
+{"ts": 1767849092.62694, "role": "robot", "text": "Please ask your question, or say 'quit' to quit.", "_received_ts": 1767849092.6273777}
+{"ts": 1767849105.0424979, "role": "user", "text": "Can you guide me to reception counter?", "_received_ts": 1767849105.0427966}
+{"ts": 1767849107.7335176, "role": "robot", "text": "Do you want to go to undergraduate counter or postgraduate counter? ", "_received_ts": 1767849107.7345998}
+{"ts": 1767849119.2388139, "role": "robot", "text": "Okay, I will guide you to undergraduate counter.", "_received_ts": 1767849119.2395492}
+{"ts": 1767849150.898158, "role": "robot", "text": "The reception counter is located at block A on the ground floor. It is part of the office and is the place where you can ask anything about the faculty. Once you reach block A, you should be able to find the reception counter easily. \n\nDo you need me to guide you there?", "_received_ts": 1767849150.8988395}

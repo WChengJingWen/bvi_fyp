@@ -227,7 +227,7 @@ class VoiceQANode:
                 if destination.lower() == "reception counter":
                     self.ui.publish_chat("robot", "Do you want to go to undergraduate counter or postgraduate counter? ")
                     self.speak("Do you want to go to undergraduate counter or postgraduate counter? ")
-                    ounter = self.listen()
+                    counter = self.listen()
 
                     if "undergraduate" in counter.lower():
                         destination = "undergraduate counter"
@@ -276,7 +276,9 @@ class VoiceQANode:
                             self.speak("I did not hear a clear yes. I will now return to my starting position. Hope you are satisfied with my service. Goodbye!")
                             rate.sleep()
                             return
-              
+                        
+            if got_yes:
+                continue
 
             # 2) Otherwise, treat it as a question → call RAG
             raw_answer = self.ask_rag(user_text)
@@ -399,6 +401,7 @@ class VoiceQANode:
                                 self.speak("I did not hear a clear answer. Please answer with yes or no.")
                             else:
                                 self.speak("I did not hear a clear yes. I will now return to my starting position. Hope you are satisfied with my service. Goodbye!")
+                                self.ui.publish_state(page="status", status="going_back")
                                 self.ui.publish_state(page="status", status="idle")
                                 rate.sleep()
                                 return
@@ -407,8 +410,9 @@ class VoiceQANode:
                     continue
 
                 elif any(w in confirm_lower for w in no_words):
-                    self.speak("Okay, I will not start navigation. Do you have more questions?")
+                    
                     self.ui.publish_chat("robot", "Okay, I will not start navigation. Do you have more questions?")
+                    self.speak("Okay, I will not start navigation. Do you have more questions?")
                     # loop back for next question
                     rate.sleep()
                     continue
