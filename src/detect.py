@@ -129,7 +129,7 @@ class CaneDetection:
         
 
         self.follow_started = True
-        rospy.sleep(5)
+        rospy.sleep(7)
         os.system("rosrun bvi_fyp voice_qa.py")
 
     # Calculate target user distance

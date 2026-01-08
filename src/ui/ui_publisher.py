@@ -18,8 +18,9 @@ class UIPublisher:
 
         self.state_pub = rospy.Publisher("/ui_state", String, queue_size=10, latch=True)
         self.chat_pub  = rospy.Publisher("/ui_chat_log", String, queue_size=50)
+        self.dist_pub  = rospy.Publisher("/ui_distance", String, queue_size=50)
         self._inited = True
-        rospy.loginfo("UIPublisher ready: /ui_state, /ui_chat_log")
+        rospy.loginfo("UIPublisher ready: /ui_state, /ui_chat_log, /ui_distance")
 
     def publish_state(self, **kwargs):
         msg = String()
@@ -30,3 +31,8 @@ class UIPublisher:
         msg = String()
         msg.data = json.dumps({"ts": time.time(), "role": role, "text": text})
         self.chat_pub.publish(msg)
+
+    def publish_distance(self, distance):
+        msg = String()
+        msg.data = json.dumps({"ts": time.time(), "distance": distance})
+        self.dist_pub.publish(msg)

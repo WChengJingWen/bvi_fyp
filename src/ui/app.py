@@ -7,6 +7,8 @@ st.set_page_config(page_title="Robot Guide UI", layout="wide")
 
 STATE_FILE = "/home/mustar/catkin_ws/src/bvi_fyp/src/tmp/ui_state.json"
 CHAT_FILE  = "/home/mustar/catkin_ws/src/bvi_fyp/src/tmp/ui_chat.jsonl"
+DIST_FILE = "/home/mustar/catkin_ws/src/bvi_fyp/src/tmp/ui_distance.jsonl"
+
 
 st_autorefresh(interval=300, key="ui_refresh")
 
@@ -35,6 +37,26 @@ if os.path.exists(CHAT_FILE):
             chat.append(json.loads(ln))
     except Exception as e:
         st.warning(f"Failed reading {CHAT_FILE}: {e}")
+
+# ---------- load distance ----------
+distance_m = None
+
+if os.path.exists(DIST_FILE):
+    try:
+        with open(DIST_FILE, "r") as f:
+            lines = f.readlines()[-80:]  # last 80 lines
+        # get last valid distance entry
+        for ln in reversed(lines):
+            try:
+                obj = json.loads(ln)
+                if "distance" in obj:
+                    distance_m = obj.get("distance", None)
+                    ts = obj.get("ts", None)
+                    break
+            except Exception:
+                continue
+    except Exception as e:
+        st.warning(f"Failed reading {DIST_FILE}: {e}")
 
 # ---------- styling ----------
 st.markdown(
@@ -86,6 +108,18 @@ def render_status():
     st.markdown(f"<div class='big-status'>{main}</div>", unsafe_allow_html=True)
     if destination:
         st.markdown(f"<div class='sub-status'>Destination: <b>{destination}</b></div>", unsafe_allow_html=True)
+    # Show distance only when it makes sense (during navigation / going back)
+    if status in ["navigating", "going_back"]:
+        try:
+            st.markdown(
+                f"<div class='sub-status'>Distance remaining: <b>{float(distance_m):.1f} m</b></div>",
+                unsafe_allow_html=True
+            )
+        except Exception:
+            st.markdown(
+                f"<div class='sub-status'>Distance remaining: <b>{distance_m}</b></div>",
+                unsafe_allow_html=True
+            )
 
 def render_detection():
     st.markdown("<div class='big-status'>Target user detected ✅</div>", unsafe_allow_html=True)

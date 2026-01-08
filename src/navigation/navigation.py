@@ -18,7 +18,12 @@ import tf.transformations
 from bvi_fyp.srv import BVIPointStamped, BVIPointStampedResponse
 import tf2_ros
 
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.abspath(os.path.join(THIS_DIR, ".."))
+if SRC_DIR not in sys.path:
+    sys.path.insert(0, SRC_DIR)
 
+from ui.ui_publisher import UIPublisher
 
 
 # Global variables for storing initial pose only once
@@ -30,6 +35,9 @@ class NavToPoint:
     def __init__(self):
         # Ensure cleanup function is called on shutdown
         rospy.on_shutdown(self.cleanup)
+
+        self.ui = UIPublisher()
+        self.ui.init()
 
         # Create an action client to interact with the move_base action server
         self.move_base = actionlib.SimpleActionClient(
@@ -179,13 +187,23 @@ class NavToPoint:
             return # ignore when approaching target user
 
         # Need at least 3 points to detect turning
-        if len(msg.poses) < 3:
+        if len(msg.poses) < 5:
             rospy.loginfo("no poses")
+            self.ui.publish_distance(0.0)
+
             return
+
+        dist = 0.0
+        for i in range(1, len(msg.poses)):
+            p1 = msg.poses[i-1].pose.position
+            p2 = msg.poses[i].pose.position
+            dist += math.hypot(p2.x - p1.x, p2.y - p1.y)
+
+        self.ui.publish_distance(dist)
 
         p1 = msg.poses[0].pose.position
         p2 = msg.poses[1].pose.position
-        p3 = msg.poses[2].pose.position
+        p3 = msg.poses[5].pose.position
 
         v1x = p2.x - p1.x
         v1y = p2.y - p1.y
@@ -195,14 +213,15 @@ class NavToPoint:
         angle1 = math.atan2(v1y, v1x)
         angle2 = math.atan2(v2y, v2x)
         delta = self.normalize_angle(angle2 - angle1)
+        # delta = angle2 - angle1
 
         rospy.loginfo(delta)
 
 
         # Classification
-        if delta > math.radians(20):
+        if delta > math.radians(50):
             motion = "left"
-        elif delta < -math.radians(20):
+        elif delta < -math.radians(50):
             motion = "right"
         else:
             return  # ignore small noisy changes
@@ -374,7 +393,7 @@ class NavToPoint:
         self.move_base.send_goal(self.goal)
         self.is_navigating = True
 
-        if target != "initial_point":
+        if target != "shelf":
             self.beep_pub.publish(True)
 
 
@@ -384,7 +403,6 @@ class NavToPoint:
             rospy.loginfo(f"Reached {target}")
             self.is_navigating = False
             self.beep_pub.publish(False)
-            self.speak("I have successfully reached near the user.")
             return NavigateResponse(reach=True, message="Reached")
         else:
             self.is_navigating = False

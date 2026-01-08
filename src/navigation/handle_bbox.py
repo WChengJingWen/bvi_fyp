@@ -45,7 +45,7 @@ class HandleBoundingBox:
         # --- Replace with actual service call ---
         # Example bounding box (x1, y1, x2, y2)
         self.bvi_target_box = (msg.x1, msg.y1, msg.x2, msg.y2)
-        self.distance_m = msg.distance
+        self.distance_m = msg.distance - self.stop_distance
         self.bvi_target_received = True
         rospy.loginfo("bbox received")
         
@@ -84,7 +84,7 @@ class HandleBoundingBox:
         # Fractional offset from center
         frac = (cx - image_width / 2) / (image_width / 2)
         y_robot = distance_m * math.tan(frac * fov_x / 2)
-        x_robot = max(0.0, distance_m - self.stop_distance)
+        x_robot = max(0.0, distance_m)
         z_robot = 0.0
 
         point = PointStamped()

@@ -1,0 +1,4 @@
+{"ts": 1767876202.3898513, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1767876202.390709}
+{"ts": 1767876213.58063, "role": "robot", "text": "Please ask your question, or say 'quit' to quit.", "_received_ts": 1767876213.5821385}
+{"ts": 1767876225.4670296, "role": "user", "text": "Guide me to Lecture Room 1", "_received_ts": 1767876225.4682624}
+{"ts": 1767876228.7064528, "role": "robot", "text": "Okay, I will guide you to Lecture Room 1.", "_received_ts": 1767876228.7073421}
