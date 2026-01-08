@@ -203,7 +203,7 @@ class NavToPoint:
 
         p1 = msg.poses[0].pose.position
         p2 = msg.poses[1].pose.position
-        p3 = msg.poses[5].pose.position
+        p3 = msg.poses[3].pose.position
 
         v1x = p2.x - p1.x
         v1y = p2.y - p1.y
@@ -219,10 +219,14 @@ class NavToPoint:
 
 
         # Classification
-        if delta > math.radians(50):
+        if delta > math.radians(35):
             motion = "left"
-        elif delta < -math.radians(50):
+        elif delta < -math.radians(35):
             motion = "right"
+        elif delta > math.radians(50):
+            return
+        elif delta < -math.radians(50):
+            return
         else:
             return  # ignore small noisy changes
     
