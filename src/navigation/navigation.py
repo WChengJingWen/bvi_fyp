@@ -15,6 +15,9 @@ import math
 from bvi_fyp.srv import tts, ttsRequest
 from threading import Lock
 import tf.transformations
+from bvi_fyp.srv import BVIPointStamped, BVIPointStampedResponse
+import tf2_ros
+
 
 
 
@@ -38,6 +41,10 @@ class NavToPoint:
         self.move_base.wait_for_server(rospy.Duration(120))
         rospy.loginfo("Connected to move base server.")
 
+        # Initialize tf buffer and listener
+        self.tf_buffer = tf2_ros.Buffer()
+        self.tf_listener = tf2_ros.TransformListener(self.tf_buffer)
+
         # Publisher for beep sound
         self.beep_pub = rospy.Publisher("/beep_control", Bool, queue_size=1)
 
@@ -56,6 +63,7 @@ class NavToPoint:
         self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 
         self.is_navigating = False
+        self.is_nav_to_target = False
         self.last_motion_state = None  # straight / left / right
 
 
@@ -87,9 +95,13 @@ class NavToPoint:
         #     'backdoor': Pose(Point(-2.2345, 4.2042, 0), Quaternion(0, 0, 0.9504, 0.3107))
 
         # --------------------------------------------------------------------------
+        # rospy.wait_for_service("/text_to_speech")
+
         # Start a ROS service called 'navigate' to receive navigation requests
-        self.service = rospy.Service('navigate', Navigate, self.nav_to_point)
-        self.tts_client = rospy.ServiceProxy("text_to_speech", tts)
+        self.service = rospy.Service('/navigate', Navigate, self.nav_to_point)
+        self.nav = rospy.Service('/approach_to_user', BVIPointStamped, self.nav_to_target_user)
+        self.tts_client = rospy.ServiceProxy("/text_to_speech", tts)
+
 
 
     def load_checkpoints(self):
@@ -103,8 +115,9 @@ class NavToPoint:
                     # Validate all checkpoints in the file
                     valid_checkpoints = {}
                     for name, data in new_checkpoints.items():
+                        name_lower = name.strip().lower()
                         if self.validate_checkpoint(data):
-                            valid_checkpoints[name] = data
+                            valid_checkpoints[name_lower] = data
                     
                     self.checkpoints = valid_checkpoints
                     
@@ -161,6 +174,9 @@ class NavToPoint:
     def global_path_callback(self, msg: Path):
         if not self.is_navigating:
             return  # ignore paths if not navigating
+        
+        if self.is_nav_to_target:
+            return # ignore when approaching target user
 
         # Need at least 3 points to detect turning
         if len(msg.poses) < 3:
@@ -231,8 +247,31 @@ class NavToPoint:
         pose.pose.orientation.w = float(orientation['w'])
         
         return pose
-    
-    def nav_to_target_user(self, point_map):
+
+    def get_current_pose(self):
+        """Get current robot pose from tf"""
+        try:
+            trans = self.tf_buffer.lookup_transform(
+                'map',
+                'base_footprint',
+                rospy.Time(0),
+                rospy.Duration(1.0)
+            )
+            pose = PoseStamped()
+            pose.header.frame_id = 'map'
+            pose.header.stamp = rospy.Time.now()
+            pose.pose.position.x = trans.transform.translation.x
+            pose.pose.position.y = trans.transform.translation.y
+            pose.pose.position.z = trans.transform.translation.z
+            pose.pose.orientation = trans.transform.rotation
+            return pose
+        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, 
+                tf2_ros.ExtrapolationException) as e:
+            rospy.logwarn(f"Could not get current pose: {e}")
+            return None
+
+    def nav_to_target_user(self, request):
+        point_map = request.target
             
         if self.is_navigating:
             rospy.logwarn("Already navigating. Cancel current goal first.")
@@ -242,6 +281,8 @@ class NavToPoint:
         pose = PoseStamped()
         pose.header = point_map.header
         pose.pose.position = point_map.point
+        # pose.pose.orientation.w = 1.0
+
         
         # Set orientation (facing the target)
         try:
@@ -269,16 +310,20 @@ class NavToPoint:
             rospy.loginfo("Navigating to detected target")
             # self.publish_status("navigating to detected target")
             self.is_navigating = True
+            self.is_nav_to_target = True
             
             # Publish for visualization
             self.goal_publisher.publish(pose)
             
             # Send goal to move_base
             self.move_base.send_goal(
-                goal,
-                done_cb=self.navigation_done_callback,
-                feedback_cb=self.navigation_feedback_callback
+                goal
+                # done_cb=self.navigation_done_callback,
+                # feedback_cb=self.navigation_feedback_callback
             )
+            self.is_navigating = False
+            self.is_nav_to_target = False
+
             return True
         except Exception as e:
             rospy.logerr(f"Error sending goal to detected target: {e}")
@@ -290,7 +335,7 @@ class NavToPoint:
         """
         Service callback to navigate the robot to the requested location.
         """
-        target = request.target_location
+        target = request.target_location.strip().lower()
 
         if target == 'stop':
             self.cancel_navigation()
@@ -339,6 +384,7 @@ class NavToPoint:
             rospy.loginfo(f"Reached {target}")
             self.is_navigating = False
             self.beep_pub.publish(False)
+            self.speak("I have successfully reached near the user.")
             return NavigateResponse(reach=True, message="Reached")
         else:
             self.is_navigating = False

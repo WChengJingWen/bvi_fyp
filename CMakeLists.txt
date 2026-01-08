@@ -66,6 +66,7 @@ add_service_files(
   rag.srv
   Navigate.srv
   BVIBoundingBox.srv
+  BVIPointStamped.srv
 )
 
 ## Generate services in the 'srv' folder

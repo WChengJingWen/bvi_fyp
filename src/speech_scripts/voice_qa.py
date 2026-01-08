@@ -37,19 +37,22 @@ class VoiceQANode:
         self.tts_client = rospy.ServiceProxy("/text_to_speech", tts)
         self.rag_client = rospy.ServiceProxy("/rag_query", rag)
 
-        rospy.loginfo("Voice RAG node started. Ready to chat.")
-        self.speak(
-            "I have successfully reached near the user. Dear user, I am your faculty guide robot. "
-            "You can ask me for any faculty location related questions or ask for a navigation guide to your destination."
-        )
+        self.speak("I have successfully reached near the user.")
         self.ui.publish_chat("robot", "Dear user, I am your faculty guide robot. "
             "You can ask me for any faculty location related questions or ask for a navigation guide to your destination.")
+        self.speak ("Dear user, I am your faculty guide robot. "
+            "You can ask me for any faculty location related questions or ask for a navigation guide to your destination."
+        )
+
+        self.home_location = "Main Entrance"
+        self.has_navigated = False 
+
         self.main_loop()
     
     def go_to_checkpoint(self, checkpoint_name):
-        rospy.wait_for_service('navigate')
+        rospy.wait_for_service('/navigate')
         try:
-            nav_service = rospy.ServiceProxy('navigate', Navigate)
+            nav_service = rospy.ServiceProxy('/navigate', Navigate)
             response = nav_service(checkpoint_name)
             print(f"Reached: {response.reach}, Message: {response.message}")
         except rospy.ServiceException as e:
@@ -180,8 +183,8 @@ class VoiceQANode:
         
 
         while not rospy.is_shutdown():
-            self.speak("Please ask your question, or say 'exit' to stop.")
-            self.ui.publish_chat("robot", "Please ask your question, or say 'exit' to stop.")
+            self.ui.publish_chat("robot", "Please ask your question, or say 'quit' to quit.")
+            self.speak("Please ask your question, or say 'quit' to quit.")
             got_yes = False
 
             user_text = self.listen()
@@ -195,9 +198,19 @@ class VoiceQANode:
             self.ui.publish_chat("user", user_text)
 
             # ---- exit / stop ----
-            if user_text.lower() in ["exit", "quit", "stop"]:
-                self.speak("Goodbye.")
-                self.ui.publish_chat("robot", "Goodbye.")
+            if any (w in user_text.lower() for w in ["exit", "quit", "stop"]):
+                print("Got quit")
+
+                if not self.has_navigated:
+                    self.speak("Hope you are satisfied with my service. Goodbye.")
+                    self.ui.publish_state(page="status", status="idle")
+                    break
+                
+                self.speak("Okay, I will return to my starting position. Hope you are satisfied with my service. Goodbye.")
+                self.ui.publish_state(page="status", status="going_back")
+                # navigate to main entrance
+                rospy.sleep(5)
+                self.ui.publish_state(page="status", status="idle")
                 break
 
             # 1) Direct navigation command → nav mock + break
@@ -214,9 +227,20 @@ class VoiceQANode:
                     continue
 
                 # If valid → proceed
+                if destination.lower() == "reception counter":
+                    self.ui.publish_chat("robot", "Sure. Do you want to go to undergraduate counter or postgraduate counter? ")
+                    self.speak("Sure. Do you want to go to undergraduate counter or postgraduate counter? ")
+                    counter = self.listen()
+
+                    if "undergraduate" in counter.lower():
+                        destination = "undergraduate counter"
+                    elif "postgraduate" in counter.lower():
+                        destination = "postgraduate counter"
+
+                # If valid → proceed
                 print(f"[NAVIGATION MOCK] Starting navigation to: {destination}")
-                self.speak(f"Okay, I will guide you to {destination}.")
                 self.ui.publish_chat("robot", f"Okay, I will guide you to {destination}.")
+                self.speak(f"Okay, I will guide you to {destination}.")
                 self.speak("Please follow the beep sound to the destination.")
                 # call real nav service here later
 
@@ -242,6 +266,7 @@ class VoiceQANode:
                     elif any(w in confirm_lower for w in yes_words):
                         self.speak("Sure! What do you need from me?")
                         got_yes = True
+                        self.ui.publish_state(page="chat", status="ready")
                         break
                     else:
                         if attempt == 0:
@@ -280,8 +305,8 @@ class VoiceQANode:
             # 3) If RAG ended with 'Do you need me to guide you there?' → yes/no branch
             if self.answer_ends_with_guide_question(answer):
                 # clarify we want yes/no
-                self.speak("Please answer with yes or no.")
                 self.ui.publish_chat("robot", "Please answer with yes or no.")
+                self.speak("Please answer with yes or no.")
                 # rospy.sleep(1.0) 
 
                 max_retries = 2
@@ -292,18 +317,18 @@ class VoiceQANode:
                     if confirm:
                         break
                     rospy.loginfo(f"[NAV-CONFIRM] Empty result on attempt {attempt+1}")
-                    self.speak("Sorry, I did not catch that. Please say yes or no.")
                     self.ui.publish_chat("robot", "Sorry, I did not catch that. Please say yes or no.")
+                    self.speak("Sorry, I did not catch that. Please say yes or no.")
                     rospy.sleep(1.0)
 
                 if not confirm:
                     rospy.loginfo("[NAV-CONFIRM] No response after retries; staying in Q&A mode.")
+                    self.ui.publish_chat("robot", "I still did not hear a clear answer, so I will not start navigation. "
+                        "Do you have more questions?")
                     self.speak(
                         "I still did not hear a clear answer, so I will not start navigation. "
                         "Do you have more questions?"
                     )
-                    self.ui.publish_chat("robot", "I still did not hear a clear answer, so I will not start navigation. "
-                        "Do you have more questions?")
                     rate.sleep()
                     continue
 
@@ -311,6 +336,7 @@ class VoiceQANode:
                 rospy.loginfo(f"[NAV-CONFIRM] User said: {confirm}")
                 self.ui.publish_chat("user", confirm)
 
+                got_yes_after_nav = False
                 
                 if any(w in confirm_lower for w in yes_words):
                     # Prefer destination from RAG; fall back to user_text as last resort
@@ -319,13 +345,24 @@ class VoiceQANode:
                     else:
                         destination = user_text
 
+                    if dest_from_rag.lower() == "reception counter":
+                        self.ui.publish_chat("robot", "Sure Do you want to go to undergraduate counter or postgraduate counter? ")
+                        self.speak("Sure. Do you want to go to undergraduate counter or postgraduate counter? ")
+                        counter = self.listen()
+
+                        if "undergraduate" in counter.lower():
+                            destination = "undergraduate counter"
+                        elif "postgraduate" in counter.lower():
+                            destination = "postgraduate counter"
+
                     rospy.loginfo(f"[NAV-START] Starting navigation (from RAG flow) to: {destination}")
                     print(f"[NAVIGATION MOCK] Starting navigation to: {destination}")
-                    self.speak("Okay, I will guide you to"+destination+"now.")
-                    self.ui.publish_chat("robot", "Okay, I will guide you to"+ destination +"now.")
+                    self.ui.publish_chat("robot", f"Okay, I will guide you to {destination} now.")
+                    self.speak(f"Okay, I will guide you to {destination} now.")
                     self.speak("Please follow the beep sound to the destination.")
                     # call real nav service here
                     self.ui.publish_state(page="status", status="navigating", destination=destination)
+                    self.has_navigated = True
                     self.go_to_checkpoint(destination)
 
                     self.speak(f"We have successfully reached the {destination}.")
@@ -349,6 +386,7 @@ class VoiceQANode:
                         elif any(w in confirm_lower for w in yes_words):
                             self.speak("Sure! What do you need from me?")
                             got_yes_after_nav = True
+                            self.ui.publish_state(page="chat", status="ready")
                             rate.sleep()
                             break
                         else:
@@ -366,16 +404,16 @@ class VoiceQANode:
                     continue
 
                 elif any(w in confirm_lower for w in no_words):
-                    self.speak("Okay, I will not start navigation. Do you have more questions?")
                     self.ui.publish_chat("robot", "Okay, I will not start navigation. Do you have more questions?")
+                    self.speak("Okay, I will not start navigation. Do you have more questions?")
                     # loop back for next question
                     rate.sleep()
                     continue
 
                 else:
                     # ambiguous answer → treat as no 
-                    self.speak("I did not hear a clear yes, so I will not start navigation. Do you have more questions?")
                     self.ui.publish_chat("robot", "I did not hear a clear yes, so I will not start navigation. Do you have more questions?")
+                    self.speak("I did not hear a clear yes, so I will not start navigation. Do you have more questions?")
                     rate.sleep()
                     continue
 

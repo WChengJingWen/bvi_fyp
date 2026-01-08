@@ -1,0 +1,7 @@
+# BVIPointStamped.srv
+
+geometry_msgs/PointStamped target
+
+---
+
+bool success

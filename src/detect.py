@@ -12,6 +12,7 @@ import threading
 import time
 from bvi_fyp.srv import stt, sttRequest
 from bvi_fyp.srv import tts, ttsRequest
+from bvi_fyp.srv import BVIBoundingBox, BVIBoundingBoxRequest
 from ui.ui_publisher import UIPublisher
 
 class CaneDetection:
@@ -28,6 +29,7 @@ class CaneDetection:
 
         # BVI target state
         self.bvi_target_box = None   # (x1, y1, x2, y2)
+        self.dist_m = None
         self.follow_started = False
 
         self.dist_threshold_m = rospy.get_param("~target_distance_threshold_m", 3.0)  # only lock target if <= 2m
@@ -52,6 +54,8 @@ class CaneDetection:
 
         self.sr_client = rospy.ServiceProxy("/speech_to_text", stt)
         self.tts_client = rospy.ServiceProxy("/text_to_speech", tts)
+        self.bbox_client = rospy.ServiceProxy("/bvi_target_bbox", BVIBoundingBox)
+
 
         rospy.loginfo("Speech services ready.")
         rospy.loginfo("Continuous cane detection node started.")
@@ -100,25 +104,32 @@ class CaneDetection:
             rospy.logerr(f"SR call failed: {e}")
             return None
 
-    def start_follow_target(self, person_box):
+    def start_follow_target(self, person_box, dist_m):
+        rospy.loginfo("in start_follow_target")
+
         """
         Placeholder: logic to start follow-me service for this specific BVI person.
         person_box: (x1, y1, x2, y2) in image coordinates.
         """
         x1, y1, x2, y2 = person_box
-        cx = int(0.5 * (x1 + x2))
-        cy = int(0.5 * (y1 + y2))
+        dist = dist_m
+        # cx = int(0.5 * (x1 + x2))
+        # cy = int(0.5 * (y1 + y2))
 
-        rospy.loginfo(f"[FOLLOW-ME] BVI target selected at image center: ({cx}, {cy})")
-        rospy.loginfo("[FOLLOW-ME] Here you would call your follow-me service with this target.")
+        try:
+            self.bbox_client(BVIBoundingBoxRequest(x1=x1, y1=y1,x2=x2,y2=y2,distance=dist))
+            rospy.loginfo("bbox sent")
+
+        except Exception as e:
+            rospy.logerr(f"Bbox service call failed: {e}")
+
+
+        # rospy.loginfo(f"[FOLLOW-ME] BVI target selected at image center: ({cx}, {cy})")
+        # rospy.loginfo("[FOLLOW-ME] Here you would call your follow-me service with this target.")
         
-        # Example (pseudo-code):
-        # req = FollowMeRequest()
-        # req.target_x = cx
-        # req.target_y = cy
-        # resp = self.follow_me_client(req)
 
         self.follow_started = True
+        rospy.sleep(5)
         os.system("rosrun bvi_fyp voice_qa.py")
 
     # Calculate target user distance
@@ -299,16 +310,17 @@ class CaneDetection:
                         bvi_person_id = pid
 
         person_with_cane = False
-        if bvi_person_box is not None:
-            dist_m = self.estimate_bbox_distance_m(bvi_person_box)
 
-            if dist_m is None:
+        if bvi_person_box is not None:
+            self.dist_m = self.estimate_bbox_distance_m(bvi_person_box)
+
+            if self.dist_m is None:
                 rospy.logwarn("Depth unavailable/invalid -> ignoring candidate.")
-            elif dist_m <= self.dist_threshold_m:
+            elif self.dist_m <= self.dist_threshold_m:
                 person_with_cane = True
-                rospy.loginfo(f"BVI within range: {dist_m:.2f}m (<= {self.dist_threshold_m:.2f}m)")
+                rospy.loginfo(f"BVI within range: {self.dist_m:.2f}m (<= {self.dist_threshold_m:.2f}m)")
             else:
-                rospy.loginfo(f"BVI detected but too far: {dist_m:.2f}m > {self.dist_threshold_m:.2f}m")
+                rospy.loginfo(f"BVI detected but too far: {self.dist_m:.2f}m > {self.dist_threshold_m:.2f}m")
 
         # Action once
         if person_with_cane and not self.follow_started:
@@ -337,7 +349,7 @@ class CaneDetection:
             self.ui.publish_state(page="status", status="approaching")
 
             self.bvi_target_box = bvi_person_box
-            self.start_follow_target(self.bvi_target_box)
+            self.start_follow_target(self.bvi_target_box, self.dist_m)
 
             x1, y1, x2, y2 = self.bvi_target_box
             print("BVI person ID:", bvi_person_id)

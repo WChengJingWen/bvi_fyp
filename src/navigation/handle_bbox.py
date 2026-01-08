@@ -5,10 +5,12 @@ from geometry_msgs.msg import PointStamped, PoseStamped
 import tf2_ros
 import tf2_geometry_msgs
 from bvi_fyp.srv import BVIBoundingBox, BVIBoundingBoxResponse
+from bvi_fyp.srv import BVIPointStamped, BVIPointStampedRequest
+
 
 class HandleBoundingBox:
     def __init__(self):
-        rospy.init_node("handle_bounding_box_node")
+        rospy.init_node("handle_bbox_node")
 
         # TF buffer
         self.tf_buffer = tf2_ros.Buffer()
@@ -19,12 +21,22 @@ class HandleBoundingBox:
         self.bvi_target_box = None  # (x1, y1, x2, y2)
         self.distance_m = None
         self.bvi_target_received = False
+        rospy.loginfo("Here")
+
+        rospy.wait_for_service("/approach_to_user")
+        rospy.loginfo("Here")
+
+
+
         self.bbox_sub = rospy.Service('bvi_target_bbox', BVIBoundingBox, self.update_target)
-        self.target_client = rospy.ServiceProxy('bvi_target_bbox', BVIBoundingBox, self.update_target)
+        self.nav_client = rospy.ServiceProxy('approach_to_user', BVIPointStamped)
 
 
         # Distance to stop before the user
         self.stop_distance = 1.0
+
+        rospy.loginfo("Handle bbox node running. Waiting for bbox...")
+
 
         # Example loop (replace with service call or subscriber)
         # rospy.Timer(rospy.Duration(1.0), self.update_target)
@@ -34,7 +46,9 @@ class HandleBoundingBox:
         # Example bounding box (x1, y1, x2, y2)
         self.bvi_target_box = (msg.x1, msg.y1, msg.x2, msg.y2)
         self.distance_m = msg.distance
-        self.bvi_target_received = True        
+        self.bvi_target_received = True
+        rospy.loginfo("bbox received")
+        
 
         # Convert to PointStamped
         point_robot = self.bbox_to_point(self.bvi_target_box, self.distance_m)
@@ -42,10 +56,19 @@ class HandleBoundingBox:
         # Transform to map, optional
         point_map = self.transform_to_map(point_robot)
         if point_map is None:
-            return
+            return False
+
+        rospy.loginfo(point_map)
 
         # Send to navigation module
-        nav_to_target_user(point_map)
+        try:
+            self.nav_client(BVIPointStampedRequest(target=point_map))
+            rospy.loginfo("pointstamped sent")
+            return True
+
+        except Exception as e:
+            rospy.logerr(f"Failed sending PointStamped: {e}")
+            return False
 
     def bbox_to_point(self, bbox, distance_m):
         """
