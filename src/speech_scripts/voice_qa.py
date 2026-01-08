@@ -44,8 +44,10 @@ class VoiceQANode:
         self.speak ("Dear user, I am your faculty guide robot. "
             "You can ask me for any faculty location related questions or ask for a navigation guide to your destination."
         )
-        
 
+        self.home_location = "Main Entrance"
+        self.has_navigated = False 
+        
         self.main_loop()
 
     def speak(self, text):
@@ -173,8 +175,8 @@ class VoiceQANode:
 
         
         while not rospy.is_shutdown():
-            self.ui.publish_chat("robot", "Please ask your question, or say 'exit' to stop.")
-            self.speak("Please ask your question, or say 'exit' to stop.")
+            self.ui.publish_chat("robot", "Please ask your question, or say 'quit' to quit.")
+            self.speak("Please ask your question, or say 'quit' to quit.")
             
             got_yes = False
 
@@ -191,11 +193,19 @@ class VoiceQANode:
             self.ui.publish_chat("user", user_text)
 
             # ---- exit / stop ----
-            if user_text.lower() in ["exit", "quit", "stop"]:
+            if any (w in user_text.lower() for w in ["exit", "quit", "stop"]):
+                print("Got quit")
 
-                self.ui.publish_chat("robot", "Goodbye.")
-                self.speak("Goodbye.")
+                if not self.has_navigated:
+                    self.speak("Hope you are satisfied with my service. Goodbye.")
+                    self.ui.publish_state(page="status", status="idle")
+                    break
                 
+                self.speak("Okay, I will return to my starting position. Hope you are satisfied with my service. Goodbye.")
+                self.ui.publish_state(page="status", status="going_back")
+                # navigate to main entrance
+                rospy.sleep(5)
+                self.ui.publish_state(page="status", status="idle")
                 break
 
             # 1) Direct navigation command → nav mock + break
@@ -214,6 +224,16 @@ class VoiceQANode:
                     continue
 
                 # If valid → proceed
+                if destination.lower() == "reception counter":
+                    self.ui.publish_chat("robot", "Do you want to go to undergraduate counter or postgraduate counter? ")
+                    self.speak("Do you want to go to undergraduate counter or postgraduate counter? ")
+                    ounter = self.listen()
+
+                    if "undergraduate" in counter.lower():
+                        destination = "undergraduate counter"
+                    elif "postgraduate" in counter.lower():
+                        destination = "postgraduate counter"
+
                 print(f"[NAVIGATION MOCK] Starting navigation to: {destination}")
 
                 self.ui.publish_chat("robot", f"Okay, I will guide you to {destination}.")
@@ -223,6 +243,7 @@ class VoiceQANode:
                 # call real nav service here later
 
                 self.ui.publish_state(page="status", status="navigating", destination=destination)
+                self.has_navigated = True
                 rospy.sleep(5)
                 self.speak(f"We have successfully reached the {destination}.")
                 self.ui.publish_state(page="status", status="navigation_completed", destination=destination)
@@ -330,6 +351,16 @@ class VoiceQANode:
                     else:
                         destination = user_text
 
+                    if dest_from_rag.lower() == "reception counter":
+                        self.ui.publish_chat("robot", "Do you want to go to undergraduate counter or postgraduate counter? ")
+                        self.speak("Do you want to go to undergraduate counter or postgraduate counter? ")
+                        counter = self.listen()
+
+                        if "undergraduate" in counter.lower():
+                            destination = "undergraduate counter"
+                        elif "postgraduate" in counter.lower():
+                            destination = "postgraduate counter"
+
                     rospy.loginfo(f"[NAV-START] Starting navigation (from RAG flow) to: {destination}")
                     print(f"[NAVIGATION MOCK] Starting navigation to: {destination}")
                     self.ui.publish_chat("robot", f"Okay, I will guide you to {destination} now.")
@@ -337,6 +368,7 @@ class VoiceQANode:
                     
                     # call real nav service here
                     self.ui.publish_state(page="status", status="navigating", destination=destination)
+                    self.has_navigated = True
                     rospy.sleep(5)
                     self.speak(f"We have successfully reached the {destination}.")
                     self.ui.publish_state(page="status", status="navigation_completed", destination=destination)

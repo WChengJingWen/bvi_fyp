@@ -103,16 +103,10 @@ bvi_instruction = (
     "Use ONLY the information provided in the retrieved documents. "
     "If the location is mentioned in any document, provide all available details clearly, even if brief. "
     "If user didn't mention about toilet, please remove the information about the nearest toilet from the answer. "
-<<<<<<< HEAD
-    "If user didn't mention about nearby rooms, please remove the information about the nearby rooms from the answer. "
-    "If there is truly no mention of the location at all, then and only then say: "
-    "'I'm sorry, I do not have information about that.' "
-=======
     "Please exclude the malay name from the answer. It is just for reference if user asks about it. "
     "If user didn't mention about nearby rooms, please remove the information about the nearby rooms from the answer. "
     "If there is truly no mention of the location at all, then and only then say: "
     "'I'm sorry, I do not have information about that. Please ask about locations in the faculty' "
->>>>>>> modified ui and ui logic
     "Be friendly, concise, and avoid repeating irrelevant disclaimers. "
     "At the very end of your response, add a separate line exactly in this format: "
     "'DESTINATION_TAG: <location_or_NONE>'. "

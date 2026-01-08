@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"ts": 1767594963.4219291, "page": "status", "status": "navigation_completed", "destination": "tutorial Room 1", "_received_ts": 1767594963.4228854}
-=======
-{"ts": 1767774105.3578267, "page": "chat", "status": "ready", "_received_ts": 1767774105.3594372}
->>>>>>> modified ui and ui logic
+{"ts": 1767848405.7707682, "page": "status", "status": "idle", "_received_ts": 1767848405.7713223}
