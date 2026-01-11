@@ -31,7 +31,7 @@ class DeepgramServices:
         rospy.loginfo("Deepgram SR (/speech_to_text) and TTS (/text_to_speech) services ready.")
 
     # Fallback: Google sr
-    def google_sr_fallback(self, timeout=5, phrase_time_limit=8):
+    def google_sr_fallback(self, timeout=10, phrase_time_limit=8):
         """Use SpeechRecognition + Google Web API as a fallback SR."""
         rospy.logwarn("Falling back to Google Speech Recognition...")
 

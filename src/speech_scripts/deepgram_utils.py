@@ -252,7 +252,7 @@ class DeepgramUtils:
     def audio2text(self, timeout=10, listen_phrase="", use_punctuation_end=False):
         """Speech recognition with VAD for faster response"""
         try:
-            rospy.loginfo(f"[DG STT] Recording with VAD (max {timeout}s)...")
+            rospy.loginfo(f"[DG STT] Recording with VAD")
             
             # Record with VAD - stops early on silence
             audio_data = self._record_audio_with_vad(timeout, silence_duration=1.5)

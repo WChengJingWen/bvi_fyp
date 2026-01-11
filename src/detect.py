@@ -74,7 +74,7 @@ class CaneDetection:
         
 
         # optional: avoid processing too fast
-        self.min_process_dt = rospy.get_param("~min_process_dt", 0.0)  # seconds (0 = as fast as possible)
+        self.min_process_dt = rospy.get_param("~min_process_dt", 0.0) 
 
         self.worker_thread = threading.Thread(target=self.process_loop, daemon=True)
         self.worker_thread.start()

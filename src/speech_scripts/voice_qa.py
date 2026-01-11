@@ -259,7 +259,7 @@ class VoiceQANode:
                     if any(w in confirm_lower for w in no_words):
                         self.speak("Okay, I will return to my starting position. Hope you are satisfied with my service. Goodbye!")
                         self.ui.publish_state(page="status", status="going_back")
-                        self.go_to_checkpoint("shelf")
+                        self.go_to_checkpoint("initial_point")
                         self.ui.publish_state(page="status", status="idle")
                         rate.sleep()
                         return
@@ -274,7 +274,7 @@ class VoiceQANode:
                         else:
                             self.speak("I did not hear a clear yes. I will now return to my starting position. Hope you are satisfied with my service. Goodbye!")
                             self.ui.publish_state(page="status", status="going_back")
-                            self.go_to_checkpoint("shelf")
+                            self.go_to_checkpoint("initial_point")
                             self.ui.publish_state(page="status", status="idle")
                             rate.sleep()
                             return
@@ -379,7 +379,7 @@ class VoiceQANode:
                         if any(w in confirm_lower for w in no_words):
                             self.speak(f"Okay, I will return to my starting position. Hope you are satisfied with my service. Goodbye!")
                             self.ui.publish_state(page="status", status="going_back")
-                            self.go_to_checkpoint("shelf")
+                            self.go_to_checkpoint("initial_point")
                             self.ui.publish_state(page="status", status="idle")
                             rate.sleep()
                             return
@@ -395,7 +395,7 @@ class VoiceQANode:
                             else:
                                 self.speak("I did not hear a clear yes. I will now return to my starting position. Hope you are satisfied with my service. Goodbye!")
                                 self.ui.publish_state(page="status", status="going_back")
-                                self.go_to_checkpoint("shelf")
+                                self.go_to_checkpoint("initial_point")
                                 self.ui.publish_state(page="status", status="idle")
                                 rate.sleep()
                                 return

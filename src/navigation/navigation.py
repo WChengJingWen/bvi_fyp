@@ -73,7 +73,12 @@ class NavToPoint:
         self.is_navigating = False
         self.is_nav_to_target = False
         self.last_motion_state = None  # straight / left / right
-
+        self.say_count = 0
+        # self.last_motion_state = None
+        self.motion_state_count = 0  # How many times we've seen the same state
+        self.min_state_confirmations = 3  # Need 3 consecutive readings before announcing
+        self.announcement_cooldown = 0
+        self.last_announcement_time = rospy.Time.now()
 
         rospy.loginfo(
             "*** Click the 2D Pose Estimate button in RViz to set the robot's initial pose...")
@@ -173,78 +178,149 @@ class NavToPoint:
             return False
 
     def normalize_angle(self, angle):
+        """Normalize angle to [-pi, pi]"""
         while angle > math.pi:
             angle -= 2 * math.pi
         while angle < -math.pi:
             angle += 2 * math.pi
         return angle
 
+    def calculate_path_curvature(self, poses, lookback_distance=2.0, lookahead_distance=4.0):
+        """
+        Calculate path curvature by comparing direction vectors at different distances
+        
+        Args:
+            poses: List of PoseStamped messages
+            lookback_distance: Distance in meters to look back from start
+            lookahead_distance: Distance in meters to look ahead from start
+        
+        Returns:
+            Average angular change in radians (positive = right turn, negative = left turn)
+        """
+        if len(poses) < 5:
+            return 0.0
+        
+        # Find pose at lookback distance
+        accumulated_dist = 0.0
+        lookback_idx = 0
+        start_pos = poses[0].pose.position
+        
+        for i in range(1, len(poses)):
+            p1 = poses[i-1].pose.position
+            p2 = poses[i].pose.position
+            segment_dist = math.hypot(p2.x - p1.x, p2.y - p1.y)
+            accumulated_dist += segment_dist
+            
+            if accumulated_dist >= lookback_distance:
+                lookback_idx = i
+                break
+        
+        # Find pose at lookahead distance
+        accumulated_dist = 0.0
+        lookahead_idx = 0
+        
+        for i in range(1, len(poses)):
+            p1 = poses[i-1].pose.position
+            p2 = poses[i].pose.position
+            segment_dist = math.hypot(p2.x - p1.x, p2.y - p1.y)
+            accumulated_dist += segment_dist
+            
+            if accumulated_dist >= lookahead_distance:
+                lookahead_idx = i
+                break
+        
+        if lookback_idx == 0 or lookahead_idx == 0 or lookback_idx >= lookahead_idx:
+            return 0.0
+        
+        # Calculate direction vectors
+        p_start = poses[0].pose.position
+        p_mid = poses[lookback_idx].pose.position
+        p_end = poses[lookahead_idx].pose.position
+        
+        # Vector from start to mid point
+        angle1 = math.atan2(p_mid.y - p_start.y, p_mid.x - p_start.x)
+        
+        # Vector from mid to end point
+        angle2 = math.atan2(p_end.y - p_mid.y, p_end.x - p_mid.x)
+        
+        # Calculate angular difference
+        delta = self.normalize_angle(angle2 - angle1)
+        
+        return delta
+
     def global_path_callback(self, msg: Path):
         if not self.is_navigating:
-            return  # ignore paths if not navigating
+            return
         
         if self.is_nav_to_target:
-            return # ignore when approaching target user
-
-        # Need at least 3 points to detect turning
-        if len(msg.poses) < 5:
-            rospy.loginfo("no poses")
-            self.ui.publish_distance(0.0)
-
             return
-
+        
+        # Calculate total path distance
+        if len(msg.poses) < 5:
+            self.ui.publish_distance(0.0)
+            return
+        
         dist = 0.0
         for i in range(1, len(msg.poses)):
             p1 = msg.poses[i-1].pose.position
             p2 = msg.poses[i].pose.position
             dist += math.hypot(p2.x - p1.x, p2.y - p1.y)
-
+        
         self.ui.publish_distance(dist)
-
-        p1 = msg.poses[0].pose.position
-        p2 = msg.poses[1].pose.position
-        p3 = msg.poses[3].pose.position
-
-        v1x = p2.x - p1.x
-        v1y = p2.y - p1.y
-        v2x = p3.x - p1.x
-        v2y = p3.y - p1.y
-
-        angle1 = math.atan2(v1y, v1x)
-        angle2 = math.atan2(v2y, v2x)
-        delta = self.normalize_angle(angle2 - angle1)
-        # delta = angle2 - angle1
-
-        rospy.loginfo(delta)
-
-
-        # Classification
-        if delta > math.radians(35):
-            motion = "left"
-        elif delta < -math.radians(35):
-            motion = "right"
-        elif delta > math.radians(50):
-            return
-        elif delta < -math.radians(50):
-            return
+        
+        # Calculate path curvature
+        curvature = self.calculate_path_curvature(
+            msg.poses,
+            lookback_distance=1.5,  # Look 1.5m ahead
+            lookahead_distance=3.5   # Compare with 3.5m ahead
+        )
+        
+        # Determine motion state with symmetric thresholds
+        TURN_THRESHOLD = math.radians(25)  # 25 degrees
+        HYSTERESIS = math.radians(5)       # 5 degrees hysteresis
+        
+        current_state = None
+        
+        if curvature > TURN_THRESHOLD:
+            current_state = "left"
+        elif curvature < -TURN_THRESHOLD:
+            current_state = "right"
         else:
-            return  # ignore small noisy changes
-    
-        self.publish_motion_audio(motion)
+            # Check if we should maintain current state (hysteresis)
+            if self.last_motion_state == "left" and curvature > TURN_THRESHOLD - HYSTERESIS:
+                current_state = "left"
+            elif self.last_motion_state == "right" and curvature < -(TURN_THRESHOLD - HYSTERESIS):
+                current_state = "right"
+            else:
+                current_state = "straight"
+        
+        # State confirmation logic
+        if current_state == self.last_motion_state:
+            self.motion_state_count += 1
+        else:
+            self.motion_state_count = 1
+            self.last_motion_state = current_state
+        
+        # Only announce after confirming state multiple times
+        if self.motion_state_count >= self.min_state_confirmations:
+            if current_state in ["left", "right"]:
+                # Check cooldown to prevent too frequent announcements
+                time_since_last = (rospy.Time.now() - self.last_announcement_time).to_sec()
+                if time_since_last > 2.0:  # At least 2 seconds between announcements
+                    self.publish_motion_audio(current_state)
+                    self.last_announcement_time = rospy.Time.now()
+                    self.motion_state_count = 0  # Reset after announcement
+        
+        rospy.logdebug(f"Curvature: {math.degrees(curvature):.1f}°, State: {current_state}, Count: {self.motion_state_count}")
 
     def publish_motion_audio(self, motion):
-        # self.beep_pub.publish(False)
-        # rospy.sleep(0.2)
-
+        """Publish audio feedback for motion"""
         if motion == "left":
-            rospy.loginfo(f"turn left")
+            rospy.loginfo("Announcing: Turning left")
             self.speak("Turning left")
         elif motion == "right":
-            rospy.loginfo(f"turn right")
+            rospy.loginfo("Announcing: Turning right")
             self.speak("Turning right")
-
-        # self.beep_pub.publish(True)
-
 
     def speak(self, text):
         try:
@@ -394,24 +470,61 @@ class NavToPoint:
 
         rospy.loginfo(f"Going to {target}")
 
-        self.move_base.send_goal(self.goal)
         self.is_navigating = True
 
-        if target != "shelf":
-            self.beep_pub.publish(True)
+        
 
+        try:
+            self.move_base.send_goal(
+                self.goal, 
+                done_cb=self.navigation_done_callback,
+                feedback_cb=self.navigation_feedback_callback)
+            
+            if target != "initial_point":
+                self.beep_pub.publish(True)
 
-        # Wait up to 300 seconds for the robot to reach the goal
-        waiting = self.move_base.wait_for_result(rospy.Duration(300))
-        if waiting:
-            rospy.loginfo(f"Reached {target}")
-            self.is_navigating = False
-            self.beep_pub.publish(False)
             return NavigateResponse(reach=True, message="Reached")
-        else:
+        except Exception as e:
+            rospy.logerr(f"Error sending goal: {e}")
+            self.publish_status("error: failed to send goal")
             self.is_navigating = False
             self.beep_pub.publish(False)
             return NavigateResponse(reach=False, message="Failed to reach point")
+        
+        # # Wait up to 300 seconds for the robot to reach the goal
+        # waiting = self.move_base.wait_for_result(rospy.Duration(300))
+        # if waiting:
+        #     rospy.loginfo(f"Reached {target}")
+        #     self.is_navigating = False
+        #     self.beep_pub.publish(False)
+        #     return NavigateResponse(reach=True, message="Reached")
+        # else:
+        #     self.is_navigating = False
+        #     self.beep_pub.publish(False)
+        #     return NavigateResponse(reach=False, message="Failed to reach point")
+    
+    def navigation_done_callback(self, status, result):
+        """Callback for when navigation is complete"""
+        self.is_navigating = False
+        self.beep_pub.publish(False)
+
+        if status == actionlib.GoalStatus.SUCCEEDED:
+            rospy.loginfo("Navigation succeeded")
+            # Clear any previous status by sending empty string
+            self.publish_status("")
+            # Then send success status
+            self.publish_status("navigation succeeded")
+        elif status == actionlib.GoalStatus.PREEMPTED:
+            rospy.loginfo("Navigation cancelled")
+            self.publish_status("navigation cancelled")
+        else:
+            rospy.logwarn(f"Navigation failed with status: {status}")
+            self.publish_status(f"navigation failed: status {status}")
+
+    def navigation_feedback_callback(self, feedback):
+        """Callback for navigation feedback"""
+        # Could implement progress updates here if needed
+        pass
     
     def cancel_navigation(self):
         """Cancel current navigation goal"""
