@@ -1,0 +1,14 @@
+{"ts": 1768142316.2085085, "role": "robot", "text": "Dear user, I am your faculty guide robot. You can ask me for any faculty location related questions or ask for a navigation guide to your destination.", "_received_ts": 1768142316.2135863}
+{"ts": 1768142327.1806607, "role": "robot", "text": "Please ask your question, or say 'quit' to quit.", "_received_ts": 1768142327.1817882}
+{"ts": 1768142337.6047285, "role": "user", "text": "I have questions to ask about faculty. Where should I go?", "_received_ts": 1768142337.605722}
+{"ts": 1768142347.9836028, "role": "robot", "text": "You should go to the reception counter located at block A on the ground floor. There, you can ask anything about the faculty. The postgraduate counter is on the left side, and the undergraduate counter is on the right side. \n\nDo you need me to guide you there?", "_received_ts": 1768142347.9845424}
+{"ts": 1768142365.8652654, "role": "robot", "text": "Please answer with yes or no.", "_received_ts": 1768142365.8671184}
+{"ts": 1768142373.306571, "role": "user", "text": "Yes.", "_received_ts": 1768142373.3104475}
+{"ts": 1768142373.3070307, "role": "robot", "text": "Sure Do you want to go to undergraduate counter or postgraduate counter? ", "_received_ts": 1768142373.3108883}
+{"ts": 1768142388.4734821, "role": "robot", "text": "Okay, I will guide you to undergraduate counter now.", "_received_ts": 1768142388.4751263}
+{"ts": 1768142535.4350455, "role": "robot", "text": "Please ask your question, or say 'quit' to quit.", "_received_ts": 1768142535.4361498}
+{"ts": 1768142546.183084, "role": "user", "text": "Bring me to lecture number one.", "_received_ts": 1768142546.189095}
+{"ts": 1768142557.0529773, "role": "robot", "text": "Sorry, I couldn't find the location lecture number one. Please ask about campus locations or try again.", "_received_ts": 1768142557.0550346}
+{"ts": 1768142557.0532086, "role": "robot", "text": "Please ask your question, or say 'quit' to quit.", "_received_ts": 1768142557.0553234}
+{"ts": 1768142568.4628701, "role": "user", "text": "I want to go to Lecture Room 1.", "_received_ts": 1768142568.466796}
+{"ts": 1768142569.9977891, "role": "robot", "text": "Okay, I will guide you to Lecture Room 1.", "_received_ts": 1768142570.0013912}

@@ -470,24 +470,64 @@ class NavToPoint:
 
         rospy.loginfo(f"Going to {target}")
 
-        self.move_base.send_goal(self.goal)
         self.is_navigating = True
 
-        if target != "shelf":
-            self.beep_pub.publish(True)
+        
 
+        try:
+            self.move_base.send_goal(
+                self.goal, 
+                done_cb=self.navigation_done_callback,
+                feedback_cb=self.navigation_feedback_callback)
+            
+            if target != "initial_point":
+                self.beep_pub.publish(True)
 
-        # Wait up to 300 seconds for the robot to reach the goal
-        waiting = self.move_base.wait_for_result(rospy.Duration(300))
-        if waiting:
-            rospy.loginfo(f"Reached {target}")
-            self.is_navigating = False
-            self.beep_pub.publish(False)
+            while self.is_navigating:
+                rospy.sleep(0.5)
+
             return NavigateResponse(reach=True, message="Reached")
-        else:
+        except Exception as e:
+            rospy.logerr(f"Error sending goal: {e}")
+            # self.publish_status("error: failed to send goal")
             self.is_navigating = False
             self.beep_pub.publish(False)
             return NavigateResponse(reach=False, message="Failed to reach point")
+        
+        # # Wait up to 300 seconds for the robot to reach the goal
+        # waiting = self.move_base.wait_for_result(rospy.Duration(300))
+        # if waiting:
+        #     rospy.loginfo(f"Reached {target}")
+        #     self.is_navigating = False
+        #     self.beep_pub.publish(False)
+        #     return NavigateResponse(reach=True, message="Reached")
+        # else:
+        #     self.is_navigating = False
+        #     self.beep_pub.publish(False)
+        #     return NavigateResponse(reach=False, message="Failed to reach point")
+    
+    def navigation_done_callback(self, status, result):
+        """Callback for when navigation is complete"""
+        self.is_navigating = False
+        self.beep_pub.publish(False)
+
+        if status == actionlib.GoalStatus.SUCCEEDED:
+            rospy.loginfo("Navigation succeeded")
+            # Clear any previous status by sending empty string
+            # self.publish_status("")
+            # Then send success status
+            # self.publish_status("navigation succeeded")
+        elif status == actionlib.GoalStatus.PREEMPTED:
+            rospy.loginfo("Navigation cancelled")
+            # self.publish_status("navigation cancelled")
+        else:
+            rospy.logwarn(f"Navigation failed with status: {status}")
+            # self.publish_status(f"navigation failed: status {status}")
+
+    def navigation_feedback_callback(self, feedback):
+        """Callback for navigation feedback"""
+        # Could implement progress updates here if needed
+        pass
     
     def cancel_navigation(self):
         """Cancel current navigation goal"""
